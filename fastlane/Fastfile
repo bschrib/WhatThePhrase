@@ -26,5 +26,10 @@ end
 
 lane :generate_appicon do
   appicon(appicon_image_file: '/Users/tytalus/Documents/XCodeApps/WhatThePhrase/WhatThePhrase/Assets/Images/tytalus_Beautiful_application_icon_for_a_Catch_Phrase_app_desig_d22d65a6-d6ef-4eeb-95a3-be3bd4b362b3.png',
-             appicon_devices: [:iphone])
+             appicon_devices: [:iphone],
+             appicon_path: "WhatThePhrase/Assets.xcassets")
+end
+
+lane :develop do
+  build_app(scheme: "Development")
 end
