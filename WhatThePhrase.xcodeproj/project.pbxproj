@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		400735DF29EE364300243FA0 /* tytalus_Beautiful_application_icon_for_a_Catch_Phrase_app_desig_d22d65a6-d6ef-4eeb-95a3-be3bd4b362b3.png in Resources */ = {isa = PBXBuildFile; fileRef = 400735DE29EE364300243FA0 /* tytalus_Beautiful_application_icon_for_a_Catch_Phrase_app_desig_d22d65a6-d6ef-4eeb-95a3-be3bd4b362b3.png */; };
 		400AD9E029ED05EE0092B66D /* AudioPlayerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400AD9DF29ED05EE0092B66D /* AudioPlayerController.swift */; };
 		405B0C2329EB95AB0001F479 /* WhatThePhraseApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405B0C2229EB95AB0001F479 /* WhatThePhraseApp.swift */; };
 		405B0C2529EB95AB0001F479 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405B0C2429EB95AB0001F479 /* ContentView.swift */; };
@@ -21,6 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		400735DE29EE364300243FA0 /* tytalus_Beautiful_application_icon_for_a_Catch_Phrase_app_desig_d22d65a6-d6ef-4eeb-95a3-be3bd4b362b3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tytalus_Beautiful_application_icon_for_a_Catch_Phrase_app_desig_d22d65a6-d6ef-4eeb-95a3-be3bd4b362b3.png"; sourceTree = "<group>"; };
 		400AD9DF29ED05EE0092B66D /* AudioPlayerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerController.swift; sourceTree = "<group>"; };
 		405B0C1F29EB95AB0001F479 /* WhatThePhrase.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhatThePhrase.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		405B0C2229EB95AB0001F479 /* WhatThePhraseApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatThePhraseApp.swift; sourceTree = "<group>"; };
@@ -104,9 +106,18 @@
 			path = WordLists;
 			sourceTree = "<group>";
 		};
+		4080BA0429EE345400CC7642 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				400735DE29EE364300243FA0 /* tytalus_Beautiful_application_icon_for_a_Catch_Phrase_app_desig_d22d65a6-d6ef-4eeb-95a3-be3bd4b362b3.png */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
 		40A46E0029EC55F300081BFF /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				4080BA0429EE345400CC7642 /* Images */,
 				4080B9FF29EDFDC500CC7642 /* WordLists */,
 				4080B9FE29EDFD9300CC7642 /* Scripts */,
 				40A46E0129EC561200081BFF /* Sounds */,
@@ -183,6 +194,7 @@
 				40A46E0329EC562500081BFF /* buzz.wav in Resources */,
 				4080BA0229EE041000CC7642 /* wordlists.json in Resources */,
 				405B0C2A29EB95AC0001F479 /* Preview Assets.xcassets in Resources */,
+				400735DF29EE364300243FA0 /* tytalus_Beautiful_application_icon_for_a_Catch_Phrase_app_desig_d22d65a6-d6ef-4eeb-95a3-be3bd4b362b3.png in Resources */,
 				405B0C2729EB95AC0001F479 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
