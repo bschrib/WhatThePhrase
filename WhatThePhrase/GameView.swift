@@ -19,7 +19,6 @@ public struct GameView: View {
     var requestManager = RequestManager()
 
     func playBuzzSound() {
-        print("Playing buzz sound")
         audioPlayerController.playSound(filename: "buzz", fileExtension: "wav")
     }
     
