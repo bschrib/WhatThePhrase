@@ -13,6 +13,22 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 # Available Actions
 
+### sync_certificates
+
+```sh
+[bundle exec] fastlane sync_certificates
+```
+
+Sync certificates
+
+### build
+
+```sh
+[bundle exec] fastlane build
+```
+
+Create ipa
+
 ### generate_appicon
 
 ```sh

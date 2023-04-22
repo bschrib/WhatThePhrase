@@ -15,7 +15,6 @@
 		405B0C2529EB95AB0001F479 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405B0C2429EB95AB0001F479 /* ContentView.swift */; };
 		405B0C2729EB95AC0001F479 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 405B0C2629EB95AC0001F479 /* Assets.xcassets */; };
 		405B0C2A29EB95AC0001F479 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 405B0C2929EB95AC0001F479 /* Preview Assets.xcassets */; };
-		405B0C3129EB95EE0001F479 /* GameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405B0C3029EB95EE0001F479 /* GameViewModel.swift */; };
 		405B0C3929EB98830001F479 /* RequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405B0C3829EB98830001F479 /* RequestManager.swift */; };
 		40653A7C29F46B9900CB96AB /* WhatThePhrase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40653A7B29F46B9900CB96AB /* WhatThePhrase.swift */; };
 		4080BA0229EE041000CC7642 /* wordlists.json in Resources */ = {isa = PBXBuildFile; fileRef = 4080BA0129EE041000CC7642 /* wordlists.json */; };
@@ -45,7 +44,6 @@
 		405B0C2429EB95AB0001F479 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		405B0C2629EB95AC0001F479 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		405B0C2929EB95AC0001F479 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		405B0C3029EB95EE0001F479 /* GameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewModel.swift; sourceTree = "<group>"; };
 		405B0C3829EB98830001F479 /* RequestManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestManager.swift; sourceTree = "<group>"; };
 		40653A7B29F46B9900CB96AB /* WhatThePhrase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatThePhrase.swift; sourceTree = "<group>"; };
 		4080BA0029EDFDFD00CC7642 /* generate_category_wordlists.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = generate_category_wordlists.py; sourceTree = "<group>"; };
@@ -120,7 +118,6 @@
 		405B0C2829EB95AC0001F479 /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
-				405B0C3029EB95EE0001F479 /* GameViewModel.swift */,
 				405B0C2929EB95AC0001F479 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
@@ -282,7 +279,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				405B0C3129EB95EE0001F479 /* GameViewModel.swift in Sources */,
 				400AD9E029ED05EE0092B66D /* AudioPlayerController.swift in Sources */,
 				405B0C2529EB95AB0001F479 /* ContentView.swift in Sources */,
 				40A46DFD29EC4A2A00081BFF /* SettingsView.swift in Sources */,
@@ -306,13 +302,17 @@
 		40424F0329F088F8000178C0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
-				DEVELOPMENT_TEAM = E328JY49Z9;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = E328JY49Z9;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.roguedeveloper.WhatThePhrase.WhatThePhraseUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.roguedeveloper.WhatThePhrase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match AppStore com.roguedeveloper.WhatThePhrase";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -323,13 +323,17 @@
 		40424F0429F088F8000178C0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
-				DEVELOPMENT_TEAM = E328JY49Z9;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = E328JY49Z9;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.roguedeveloper.WhatThePhrase.WhatThePhraseUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.roguedeveloper.WhatThePhrase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match AppStore com.roguedeveloper.WhatThePhrase";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -456,10 +460,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"WhatThePhrase/Preview Content\"";
-				DEVELOPMENT_TEAM = E328JY49Z9;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = E328JY49Z9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -474,9 +480,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.roguedeveloper.WhatThePhrase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match AppStore com.roguedeveloper.WhatThePhrase";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
 		};
@@ -485,10 +494,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"WhatThePhrase/Preview Content\"";
-				DEVELOPMENT_TEAM = E328JY49Z9;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = E328JY49Z9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -503,9 +514,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.roguedeveloper.WhatThePhrase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match AppStore com.roguedeveloper.WhatThePhrase";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
 		};

@@ -17,6 +17,10 @@ default_platform(:ios)
 
 platform :ios do
   app_store_connect_api_key(
+    key_id: "5YWYTPY78B",
+    issuer_id: "c95787ec-9536-476a-bdd0-579e0e62897b",
+    key_content: "LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCk1JR1RBZ0VBTUJNR0J5cUdTTTQ5QWdFR0NDcUdT\nTTQ5QXdFSEJIa3dkd0lCQVFRZ0ttT3BhZ0lOYlhCc0ZWS2UKVzlxcnJIaEI3NmZ5UjlpWW5YOU5p\nY01ab0NlZ0NnWUlLb1pJemowREFRZWhSQU5DQUFUWTBWUU5MdVMyWXR1SgozRDJYK2hsRGhWSkJ6\nK2wwY01zdjZGWE1xaEVLU3FCTG5jZTNMVFZGK0RKYjZFVWxZVEpLNU03ckNyODVzMXNmCm9Wc2lV\nY0V1Ci0tLS0tRU5EIFBSSVZBVEUgS0VZLS0tLS0=",
+    in_house: false,
     is_key_content_base64: true
   )
   
@@ -26,6 +30,22 @@ platform :ios do
     build_app(scheme: "WhatThePhrase")
     upload_to_testflight
   end
+end
+
+desc "Sync certificates"
+  lane :sync_certificates do
+    #read-only disables match from overriding the existing certificates.
+    match({readonly: true, type: "appstore"})
+end
+
+desc "Create ipa"
+  lane :build do
+    #update profiles
+    sync_certificates
+    # Increases the build number by 1
+    increment_build_number
+    # Creates a signed file
+    gym
 end
 
 lane :generate_appicon do
