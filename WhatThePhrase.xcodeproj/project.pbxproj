@@ -9,28 +9,45 @@
 /* Begin PBXBuildFile section */
 		400735DF29EE364300243FA0 /* tytalus_Beautiful_application_icon_for_a_Catch_Phrase_app_desig_d22d65a6-d6ef-4eeb-95a3-be3bd4b362b3.png in Resources */ = {isa = PBXBuildFile; fileRef = 400735DE29EE364300243FA0 /* tytalus_Beautiful_application_icon_for_a_Catch_Phrase_app_desig_d22d65a6-d6ef-4eeb-95a3-be3bd4b362b3.png */; };
 		400AD9E029ED05EE0092B66D /* AudioPlayerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400AD9DF29ED05EE0092B66D /* AudioPlayerController.swift */; };
-		405B0C2329EB95AB0001F479 /* WhatThePhraseApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405B0C2229EB95AB0001F479 /* WhatThePhraseApp.swift */; };
+		40424EFE29F088F8000178C0 /* WhatThePhraseUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40424EFD29F088F8000178C0 /* WhatThePhraseUITests.swift */; };
+		40424F0029F088F8000178C0 /* WhatThePhraseUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40424EFF29F088F8000178C0 /* WhatThePhraseUITestsLaunchTests.swift */; };
+		40424F0729F08A2C000178C0 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40424F0629F08A2C000178C0 /* SnapshotHelper.swift */; };
 		405B0C2529EB95AB0001F479 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405B0C2429EB95AB0001F479 /* ContentView.swift */; };
 		405B0C2729EB95AC0001F479 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 405B0C2629EB95AC0001F479 /* Assets.xcassets */; };
 		405B0C2A29EB95AC0001F479 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 405B0C2929EB95AC0001F479 /* Preview Assets.xcassets */; };
 		405B0C3129EB95EE0001F479 /* GameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405B0C3029EB95EE0001F479 /* GameViewModel.swift */; };
 		405B0C3929EB98830001F479 /* RequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405B0C3829EB98830001F479 /* RequestManager.swift */; };
+		40653A7C29F46B9900CB96AB /* WhatThePhrase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40653A7B29F46B9900CB96AB /* WhatThePhrase.swift */; };
 		4080BA0229EE041000CC7642 /* wordlists.json in Resources */ = {isa = PBXBuildFile; fileRef = 4080BA0129EE041000CC7642 /* wordlists.json */; };
 		40A46DFD29EC4A2A00081BFF /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40A46DFC29EC4A2A00081BFF /* SettingsView.swift */; };
 		40A46E0329EC562500081BFF /* buzz.wav in Resources */ = {isa = PBXBuildFile; fileRef = 40A46E0229EC562500081BFF /* buzz.wav */; };
 		40E86A3A29EB9D4B0039AF43 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E86A3929EB9D4B0039AF43 /* GameView.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		40424F0129F088F8000178C0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 405B0C1729EB95AB0001F479 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 405B0C1E29EB95AB0001F479;
+			remoteInfo = WhatThePhrase;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		400735DE29EE364300243FA0 /* tytalus_Beautiful_application_icon_for_a_Catch_Phrase_app_desig_d22d65a6-d6ef-4eeb-95a3-be3bd4b362b3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tytalus_Beautiful_application_icon_for_a_Catch_Phrase_app_desig_d22d65a6-d6ef-4eeb-95a3-be3bd4b362b3.png"; sourceTree = "<group>"; };
 		400AD9DF29ED05EE0092B66D /* AudioPlayerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerController.swift; sourceTree = "<group>"; };
+		40424EFB29F088F8000178C0 /* WhatThePhraseUIScreenshotTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WhatThePhraseUIScreenshotTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		40424EFD29F088F8000178C0 /* WhatThePhraseUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatThePhraseUITests.swift; sourceTree = "<group>"; };
+		40424EFF29F088F8000178C0 /* WhatThePhraseUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatThePhraseUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		40424F0629F08A2C000178C0 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SnapshotHelper.swift; path = fastlane/SnapshotHelper.swift; sourceTree = SOURCE_ROOT; };
 		405B0C1F29EB95AB0001F479 /* WhatThePhrase.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhatThePhrase.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		405B0C2229EB95AB0001F479 /* WhatThePhraseApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatThePhraseApp.swift; sourceTree = "<group>"; };
 		405B0C2429EB95AB0001F479 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		405B0C2629EB95AC0001F479 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		405B0C2929EB95AC0001F479 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		405B0C3029EB95EE0001F479 /* GameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewModel.swift; sourceTree = "<group>"; };
 		405B0C3829EB98830001F479 /* RequestManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestManager.swift; sourceTree = "<group>"; };
+		40653A7B29F46B9900CB96AB /* WhatThePhrase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatThePhrase.swift; sourceTree = "<group>"; };
 		4080BA0029EDFDFD00CC7642 /* generate_category_wordlists.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = generate_category_wordlists.py; sourceTree = "<group>"; };
 		4080BA0129EE041000CC7642 /* wordlists.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = wordlists.json; sourceTree = "<group>"; };
 		40A46DFC29EC4A2A00081BFF /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -39,6 +56,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		40424EF829F088F8000178C0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		405B0C1C29EB95AB0001F479 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -49,10 +73,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		40424EFC29F088F8000178C0 /* WhatThePhraseUITests */ = {
+			isa = PBXGroup;
+			children = (
+				40424F0629F08A2C000178C0 /* SnapshotHelper.swift */,
+				40424EFD29F088F8000178C0 /* WhatThePhraseUITests.swift */,
+				40424EFF29F088F8000178C0 /* WhatThePhraseUITestsLaunchTests.swift */,
+			);
+			path = WhatThePhraseUITests;
+			sourceTree = "<group>";
+		};
 		405B0C1629EB95AB0001F479 = {
 			isa = PBXGroup;
 			children = (
 				405B0C2129EB95AB0001F479 /* WhatThePhrase */,
+				40424EFC29F088F8000178C0 /* WhatThePhraseUITests */,
 				405B0C2029EB95AB0001F479 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -61,6 +96,7 @@
 			isa = PBXGroup;
 			children = (
 				405B0C1F29EB95AB0001F479 /* WhatThePhrase.app */,
+				40424EFB29F088F8000178C0 /* WhatThePhraseUIScreenshotTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -69,13 +105,14 @@
 			isa = PBXGroup;
 			children = (
 				40A46E0029EC55F300081BFF /* Assets */,
-				40A46DFC29EC4A2A00081BFF /* SettingsView.swift */,
+				400AD9DF29ED05EE0092B66D /* AudioPlayerController.swift */,
 				405B0C2429EB95AB0001F479 /* ContentView.swift */,
-				405B0C3829EB98830001F479 /* RequestManager.swift */,
 				40E86A3929EB9D4B0039AF43 /* GameView.swift */,
+				405B0C3829EB98830001F479 /* RequestManager.swift */,
+				40A46DFC29EC4A2A00081BFF /* SettingsView.swift */,
 				405B0C2629EB95AC0001F479 /* Assets.xcassets */,
 				405B0C2829EB95AC0001F479 /* Preview Content */,
-				400AD9DF29ED05EE0092B66D /* AudioPlayerController.swift */,
+				40653A7B29F46B9900CB96AB /* WhatThePhrase.swift */,
 			);
 			path = WhatThePhrase;
 			sourceTree = "<group>";
@@ -83,7 +120,6 @@
 		405B0C2829EB95AC0001F479 /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
-				405B0C2229EB95AB0001F479 /* WhatThePhraseApp.swift */,
 				405B0C3029EB95EE0001F479 /* GameViewModel.swift */,
 				405B0C2929EB95AC0001F479 /* Preview Assets.xcassets */,
 			);
@@ -136,6 +172,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		40424EFA29F088F8000178C0 /* WhatThePhraseUIScreenshotTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 40424F0529F088F8000178C0 /* Build configuration list for PBXNativeTarget "WhatThePhraseUIScreenshotTests" */;
+			buildPhases = (
+				40424EF729F088F8000178C0 /* Sources */,
+				40424EF829F088F8000178C0 /* Frameworks */,
+				40424EF929F088F8000178C0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				40424F0229F088F8000178C0 /* PBXTargetDependency */,
+			);
+			name = WhatThePhraseUIScreenshotTests;
+			productName = WhatThePhraseUITests;
+			productReference = 40424EFB29F088F8000178C0 /* WhatThePhraseUIScreenshotTests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		405B0C1E29EB95AB0001F479 /* WhatThePhrase */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 405B0C2D29EB95AC0001F479 /* Build configuration list for PBXNativeTarget "WhatThePhrase" */;
@@ -163,6 +217,10 @@
 				LastSwiftUpdateCheck = 1430;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
+					40424EFA29F088F8000178C0 = {
+						CreatedOnToolsVersion = 14.3;
+						TestTargetID = 405B0C1E29EB95AB0001F479;
+					};
 					405B0C1E29EB95AB0001F479 = {
 						CreatedOnToolsVersion = 14.3;
 					};
@@ -182,11 +240,19 @@
 			projectRoot = "";
 			targets = (
 				405B0C1E29EB95AB0001F479 /* WhatThePhrase */,
+				40424EFA29F088F8000178C0 /* WhatThePhraseUIScreenshotTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		40424EF929F088F8000178C0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		405B0C1D29EB95AB0001F479 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -202,6 +268,16 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		40424EF729F088F8000178C0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				40424EFE29F088F8000178C0 /* WhatThePhraseUITests.swift in Sources */,
+				40424F0029F088F8000178C0 /* WhatThePhraseUITestsLaunchTests.swift in Sources */,
+				40424F0729F08A2C000178C0 /* SnapshotHelper.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		405B0C1B29EB95AB0001F479 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -210,15 +286,57 @@
 				400AD9E029ED05EE0092B66D /* AudioPlayerController.swift in Sources */,
 				405B0C2529EB95AB0001F479 /* ContentView.swift in Sources */,
 				40A46DFD29EC4A2A00081BFF /* SettingsView.swift in Sources */,
-				405B0C2329EB95AB0001F479 /* WhatThePhraseApp.swift in Sources */,
 				405B0C3929EB98830001F479 /* RequestManager.swift in Sources */,
+				40653A7C29F46B9900CB96AB /* WhatThePhrase.swift in Sources */,
 				40E86A3A29EB9D4B0039AF43 /* GameView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		40424F0229F088F8000178C0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 405B0C1E29EB95AB0001F479 /* WhatThePhrase */;
+			targetProxy = 40424F0129F088F8000178C0 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		40424F0329F088F8000178C0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 4;
+				DEVELOPMENT_TEAM = E328JY49Z9;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.roguedeveloper.WhatThePhrase.WhatThePhraseUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = WhatThePhrase;
+			};
+			name = Debug;
+		};
+		40424F0429F088F8000178C0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 4;
+				DEVELOPMENT_TEAM = E328JY49Z9;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.roguedeveloper.WhatThePhrase.WhatThePhraseUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = WhatThePhrase;
+			};
+			name = Release;
+		};
 		405B0C2B29EB95AC0001F479 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -339,7 +457,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"WhatThePhrase/Preview Content\"";
 				DEVELOPMENT_TEAM = E328JY49Z9;
 				ENABLE_PREVIEWS = YES;
@@ -368,7 +486,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"WhatThePhrase/Preview Content\"";
 				DEVELOPMENT_TEAM = E328JY49Z9;
 				ENABLE_PREVIEWS = YES;
@@ -394,6 +512,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		40424F0529F088F8000178C0 /* Build configuration list for PBXNativeTarget "WhatThePhraseUIScreenshotTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				40424F0329F088F8000178C0 /* Debug */,
+				40424F0429F088F8000178C0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		405B0C1A29EB95AB0001F479 /* Build configuration list for PBXProject "WhatThePhrase" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

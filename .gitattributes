@@ -1,0 +1,2 @@
+.gitattributes !filter !diff
+project_config.json filter=git-crypt diff=git-crypt
