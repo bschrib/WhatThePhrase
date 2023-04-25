@@ -8,7 +8,6 @@ public struct GameView: View {
     @State private var showAlert: Bool = false
     @State private var isGameRunning: Bool = false
     @State private var currentWord: String = ""
-    @State private var timeRemainingFormatted: String = ""
     @State private var timer: Timer? = nil
     @State private(set) var timeRemaining: Int = 60
     @State private var team1Score: Int = 0
@@ -16,16 +15,15 @@ public struct GameView: View {
     @StateObject private var audioPlayerController = AudioPlayerController()
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
 
+    private var timeRemainingFormatted: String {
+        let minutes = timeRemaining / 60
+        let seconds = timeRemaining % 60
+        return String(format: "%02d:%02d", minutes, seconds)
+    }
     var requestManager = RequestManager()
 
     func playBuzzSound() {
         audioPlayerController.playSound(filename: "buzz", fileExtension: "wav")
-    }
-    
-    private func formatTime(_ time: Int) -> String {
-        let minutes = time / 60
-        let seconds = time % 60
-        return String(format: "%02d:%02d", minutes, seconds)
     }
 
     private func startGame() {
@@ -35,13 +33,12 @@ public struct GameView: View {
         team1Score = 0
         team2Score = 0
         Task {
-            await asyncUpdateWord()
+            try? await asyncUpdateWord(category: selectedCategory ?? "")
         }
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             timeRemaining -= 1
             let minutes = timeRemaining / 60
             let seconds = timeRemaining % 60
-            timeRemainingFormatted = String(format: "%02d:%02d", minutes, seconds)
             if timeRemaining == 0 {
                 playBuzzSound()
                 stopGame()
@@ -58,20 +55,20 @@ public struct GameView: View {
     }
 
     private func pass() async {
-        await asyncUpdateWord()
+        try? await asyncUpdateWord(category: selectedCategory ?? "")
     }
 
     private func addPointToTeam1() async {
         if isGameRunning {
             team1Score += 1
-            await asyncUpdateWord()
+            try? await asyncUpdateWord(category: selectedCategory ?? "")
         }
     }
 
     private func addPointToTeam2() async {
         if isGameRunning {
             team2Score += 1
-            await asyncUpdateWord()
+            try? await asyncUpdateWord(category: selectedCategory ?? "")
         }
     }
 
@@ -102,7 +99,7 @@ public struct GameView: View {
     }
     
     @MainActor
-    private func asyncUpdateWord() async {
+    func asyncUpdateWord(category: String) async throws {
         do {
             currentWord = try await requestManager.asyncGetRandomWord(category: selectedCategory ?? "")
         } catch {
@@ -116,9 +113,18 @@ public struct GameView: View {
                 .font(.largeTitle)
                 .fontWeight(.bold)
 
-            Text(isGameRunning ? currentWord : "")
-                .font(.system(size:24))
-                .padding(.bottom, 5)
+            ZStack {
+                Text("placeholder")
+                    .font(.system(size:24))
+                    .opacity(0) // Set opacity to 0 to make it invisible
+                
+                if isGameRunning {
+                    Text(currentWord)
+                        .font(.system(size:24))
+                }
+            }
+            .padding(.bottom, 5)
+
 
             Text(timeRemainingFormatted)
                 .font(.system(size: 24))
@@ -201,14 +207,12 @@ public struct GameView: View {
         .padding()
         .onAppear {
             timeRemaining = timerDuration
-            timeRemainingFormatted = formatTime(timerDuration)
             Task {
-                await asyncUpdateWord()
+                try? await asyncUpdateWord(category: selectedCategory ?? "")
             }
         }
         .onChange(of: timerDuration) { newValue in
             timeRemaining = newValue
-            timeRemainingFormatted = formatTime(newValue)
         }
     }
 }

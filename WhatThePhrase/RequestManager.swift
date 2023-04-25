@@ -5,17 +5,17 @@ class RequestManager {
     private var usedWords: [String: Set<String>] = [:]
     
     let categories: [String] = [
-        "Geography",
-        "Transportation",
-        "Around The House",
-        "Food/Drink",
-        "Plants/Animals",
-        "Family",
-        "Everything",
-        "Tech/Inventions",
-        "History Buff",
-        "Entertainment",
-        "Sports/Games"
+        "Places & Spaces",
+        "Travel & Transit",
+        "Household Items",
+        "Cuisine & Beverages",
+        "Life On Earth",
+        "Relatives & Relations",
+        "Random",
+        "Gadgets & Innovations",
+        "Past Chronicles",
+        "Pop Culture",
+        "Games & Contests"
     ]
     
     func loadLocalWordlists() -> [String: [String]] {
