@@ -2,14 +2,17 @@ import SwiftUI
 
 struct LaunchScreen: View {
     var body: some View {
-        VStack {
-            Spacer()
-            Image("LaunchImage")
-                .resizable()
-                .scaledToFit()
-                .padding()
-            Spacer()
+        GeometryReader { geometry in
+            VStack {
+                Spacer()
+                Image("LaunchImage")
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: geometry.size.width, height: geometry.size.height)
+                Spacer()
+            }
         }
+        .edgesIgnoringSafeArea(.all)
     }
 }
 

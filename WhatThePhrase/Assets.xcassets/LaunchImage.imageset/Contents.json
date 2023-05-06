@@ -1,15 +1,17 @@
 {
   "images" : [
     {
+      "filename" : "AppLaunchScreen@1x.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "AppLaunchScreen@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "tytalus_Geography_Transportation_Household_FoodDrink_PlantsAnim_43ba22ea-3cc8-405c-9821-7efb813eda1f.png",
+      "filename" : "AppLaunchScreen.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

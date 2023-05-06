@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Replace 'config.json' with the path to your JSON file
-JSON_FILE="project_config.json"
+JSON_FILE="projectConfig.json"
 
 if [ ! -f "$JSON_FILE" ]; then
     echo "File not found: $JSON_FILE"

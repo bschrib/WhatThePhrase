@@ -17,10 +17,6 @@ default_platform(:ios)
 
 platform :ios do
   app_store_connect_api_key(
-    key_id: "5YWYTPY78B",
-    issuer_id: "c95787ec-9536-476a-bdd0-579e0e62897b",
-    key_content: "LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCk1JR1RBZ0VBTUJNR0J5cUdTTTQ5QWdFR0NDcUdT\nTTQ5QXdFSEJIa3dkd0lCQVFRZ0ttT3BhZ0lOYlhCc0ZWS2UKVzlxcnJIaEI3NmZ5UjlpWW5YOU5p\nY01ab0NlZ0NnWUlLb1pJemowREFRZWhSQU5DQUFUWTBWUU5MdVMyWXR1SgozRDJYK2hsRGhWSkJ6\nK2wwY01zdjZGWE1xaEVLU3FCTG5jZTNMVFZGK0RKYjZFVWxZVEpLNU03ckNyODVzMXNmCm9Wc2lV\nY0V1Ci0tLS0tRU5EIFBSSVZBVEUgS0VZLS0tLS0=",
-    in_house: false,
     is_key_content_base64: true
   )
   
@@ -48,7 +44,7 @@ desc "Create ipa"
 end
 
 lane :generate_appicon do
-  appicon(appicon_image_file: '/Users/tytalus/Documents/XCodeApps/WhatThePhrase/WhatThePhrase/Assets/Images/tytalus_Beautiful_application_icon_for_a_Catch_Phrase_app_desig_d22d65a6-d6ef-4eeb-95a3-be3bd4b362b3.png',
+  appicon(appicon_image_file: '/Users/tytalus/Documents/XCodeApps/WhatThePhrase/WhatThePhrase/Assets/Images/AppIcon.png',
              appicon_devices: [:ipad, :iphone, :ios_marketing],
              appicon_path: "WhatThePhrase/Assets.xcassets")
 end
@@ -56,3 +52,23 @@ end
 lane :develop do
   build_app(scheme: "Development")
 end
+
+lane :generate_app do
+  xcodebuild(
+        configuration: build_config[:configuration],
+        scheme: build_config[:scheme],
+        workspace: build_config[:xcode_workspace],
+        xcargs: "-quiet -sdk 'iphonesimulator' -destination 'generic/platform=iOS Simulator'",
+        derivedDataPath: IOS_DERIVED_DATA_PATH # this will contain the .app which we need later on
+  )
+end
+
+lane :generate_launch_image do
+  appicon(
+    appicon_image_file: "WhatThePhrase/Assets/Images/AppLaunchScreen.png",
+    appicon_devices: [:iphone],
+    appicon_path: "WhatThePhrase/Assets.xcassets",
+    appicon_name: "LaunchImage"
+  )
+end
+

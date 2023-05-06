@@ -45,6 +45,22 @@ Create ipa
 
 
 
+### generate_app
+
+```sh
+[bundle exec] fastlane generate_app
+```
+
+
+
+### generate_launch_image
+
+```sh
+[bundle exec] fastlane generate_launch_image
+```
+
+
+
 ----
 
 

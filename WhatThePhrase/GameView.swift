@@ -5,6 +5,7 @@ public struct GameView: View {
     @Binding var showCategories: Bool
     @Binding var selectedCategory: String?
     @Binding var timerDuration: Int
+    @Binding var playAsTeams: Bool
     @State private var showAlert: Bool = false
     @State private var isGameRunning: Bool = false
     @State private var currentWord: String = ""
@@ -37,8 +38,6 @@ public struct GameView: View {
         }
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             timeRemaining -= 1
-            let minutes = timeRemaining / 60
-            let seconds = timeRemaining % 60
             if timeRemaining == 0 {
                 playBuzzSound()
                 stopGame()
@@ -145,19 +144,34 @@ public struct GameView: View {
                     .cornerRadius(10)
             }
 
-            HStack {
-                teamButton(teamName: "Team 1", teamColor: Color.red, teamAction: {
-                    Task {
-                        await addPointToTeam1()
-                    }
-                })
+            if playAsTeams {
+                            HStack {
+                                teamButton(teamName: "Team 1", teamColor: Color.red, teamAction: {
+                                    Task {
+                                        await addPointToTeam1()
+                                    }
+                                })
 
-                teamButton(teamName: "Team 2", teamColor: Color.green, teamAction: {
-                    Task {
-                        await addPointToTeam2()
-                    }
-                })
-            }
+                                teamButton(teamName: "Team 2", teamColor: Color.green, teamAction: {
+                                    Task {
+                                        await addPointToTeam2()
+                                    }
+                                })
+                            }
+                        } else {
+                            Button(action: {
+                                Task {
+                                    await addPointToTeam1()
+                                }
+                            }) {
+                                Text("Correct")
+                                    .font(.system(size: 24))
+                                    .padding()
+                                    .background(Color.blue)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(10)
+                            }
+                        }
 
             Button(action: {
                 Task {
@@ -174,10 +188,14 @@ public struct GameView: View {
             .padding(.top, 10)
 
             HStack(spacing: 30) {
-                teamScoreView(teamColor: Color.red, score: $team1Score)
-                teamScoreView(teamColor: Color.green, score: $team2Score)
-            }
-            .padding(.top, 20)
+                            if playAsTeams {
+                                teamScoreView(teamColor: Color.red, score: $team1Score)
+                                teamScoreView(teamColor: Color.green, score: $team2Score)
+                            } else {
+                                teamScoreView(teamColor: Color.blue, score: $team1Score)
+                            }
+                        }
+                        .padding(.top, 20)
             .alert(isPresented: $showAlert) {
                 let message: String
                 if team1Score > team2Score {
@@ -219,6 +237,6 @@ public struct GameView: View {
 
 struct GameView_Previews: PreviewProvider {
     static var previews: some View {
-        GameView(showCategories: .constant(false), selectedCategory: .constant("Sample Category"), timerDuration: .constant(60))
+        GameView(showCategories: .constant(false), selectedCategory: .constant("Sample Category"), timerDuration: .constant(60), playAsTeams: .constant(false))
     }
 }

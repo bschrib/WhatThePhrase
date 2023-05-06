@@ -1,0 +1,9 @@
+# flow.yaml
+
+appId: com.roguedeveloper.WhatThePhrase
+---
+- launchApp
+- tapOn: "Places & Spaces"
+- tapOn: "Start"
+- tapOn: "Team 1"
+- tapOn: "Stop"

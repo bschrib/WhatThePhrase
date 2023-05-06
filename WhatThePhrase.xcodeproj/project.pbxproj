@@ -7,7 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		400735DF29EE364300243FA0 /* tytalus_Beautiful_application_icon_for_a_Catch_Phrase_app_desig_d22d65a6-d6ef-4eeb-95a3-be3bd4b362b3.png in Resources */ = {isa = PBXBuildFile; fileRef = 400735DE29EE364300243FA0 /* tytalus_Beautiful_application_icon_for_a_Catch_Phrase_app_desig_d22d65a6-d6ef-4eeb-95a3-be3bd4b362b3.png */; };
+		4009DE132A005E7700C448F6 /* AppIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4009DE112A005E7700C448F6 /* AppIcon.png */; };
+		4009DE182A00616900C448F6 /* AppLaunchScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = 4009DE172A00616900C448F6 /* AppLaunchScreen.png */; };
+		4009DE1B2A00AB9C00C448F6 /* AppLaunchScreen@1x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4009DE192A00AB9C00C448F6 /* AppLaunchScreen@1x.png */; };
+		4009DE1C2A00AB9C00C448F6 /* AppLaunchScreen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4009DE1A2A00AB9C00C448F6 /* AppLaunchScreen@2x.png */; };
 		400AD9E029ED05EE0092B66D /* AudioPlayerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400AD9DF29ED05EE0092B66D /* AudioPlayerController.swift */; };
 		40424EFE29F088F8000178C0 /* WhatThePhraseUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40424EFD29F088F8000178C0 /* WhatThePhraseUITests.swift */; };
 		40424F0029F088F8000178C0 /* WhatThePhraseUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40424EFF29F088F8000178C0 /* WhatThePhraseUITestsLaunchTests.swift */; };
@@ -35,7 +38,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		400735DE29EE364300243FA0 /* tytalus_Beautiful_application_icon_for_a_Catch_Phrase_app_desig_d22d65a6-d6ef-4eeb-95a3-be3bd4b362b3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tytalus_Beautiful_application_icon_for_a_Catch_Phrase_app_desig_d22d65a6-d6ef-4eeb-95a3-be3bd4b362b3.png"; sourceTree = "<group>"; };
+		4009DE112A005E7700C448F6 /* AppIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppIcon.png; sourceTree = "<group>"; };
+		4009DE172A00616900C448F6 /* AppLaunchScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = AppLaunchScreen.png; path = ../../../../../../Downloads/AppLaunchScreen.png; sourceTree = "<group>"; };
+		4009DE192A00AB9C00C448F6 /* AppLaunchScreen@1x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppLaunchScreen@1x.png"; sourceTree = "<group>"; };
+		4009DE1A2A00AB9C00C448F6 /* AppLaunchScreen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppLaunchScreen@2x.png"; sourceTree = "<group>"; };
 		400AD9DF29ED05EE0092B66D /* AudioPlayerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerController.swift; sourceTree = "<group>"; };
 		40424EFB29F088F8000178C0 /* WhatThePhraseUIScreenshotTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WhatThePhraseUIScreenshotTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		40424EFD29F088F8000178C0 /* WhatThePhraseUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatThePhraseUITests.swift; sourceTree = "<group>"; };
@@ -145,7 +151,10 @@
 		4080BA0429EE345400CC7642 /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				400735DE29EE364300243FA0 /* tytalus_Beautiful_application_icon_for_a_Catch_Phrase_app_desig_d22d65a6-d6ef-4eeb-95a3-be3bd4b362b3.png */,
+				4009DE112A005E7700C448F6 /* AppIcon.png */,
+				4009DE192A00AB9C00C448F6 /* AppLaunchScreen@1x.png */,
+				4009DE1A2A00AB9C00C448F6 /* AppLaunchScreen@2x.png */,
+				4009DE172A00616900C448F6 /* AppLaunchScreen.png */,
 			);
 			path = Images;
 			sourceTree = "<group>";
@@ -257,9 +266,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4009DE132A005E7700C448F6 /* AppIcon.png in Resources */,
+				4009DE182A00616900C448F6 /* AppLaunchScreen.png in Resources */,
+				4009DE1C2A00AB9C00C448F6 /* AppLaunchScreen@2x.png in Resources */,
+				4009DE1B2A00AB9C00C448F6 /* AppLaunchScreen@1x.png in Resources */,
 				40A46E0329EC562500081BFF /* buzz.wav in Resources */,
 				4080BA0229EE041000CC7642 /* wordlists.json in Resources */,
-				400735DF29EE364300243FA0 /* tytalus_Beautiful_application_icon_for_a_Catch_Phrase_app_desig_d22d65a6-d6ef-4eeb-95a3-be3bd4b362b3.png in Resources */,
 				405B0C2729EB95AC0001F479 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -308,7 +320,7 @@
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = E328JY49Z9;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -329,7 +341,7 @@
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = E328JY49Z9;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -466,7 +478,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_ASSET_PATHS = "\"WhatThePhrase/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = E328JY49Z9;
@@ -500,7 +512,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_ASSET_PATHS = "\"WhatThePhrase/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = E328JY49Z9;

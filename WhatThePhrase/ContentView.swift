@@ -13,8 +13,8 @@ struct CategoryName: Identifiable {
 struct ContentView: View {
     @State private var selectedCategory: CategoryName? = nil
     @State private var showSettings: Bool = false
-    @State private var playAsTeams: Bool = true
-    @State private var timerDuration: Int = 60
+    @AppStorage("playAsTeams") private var playAsTeams: Bool = true
+    @AppStorage("timerDuration") private var timerDuration: Int = 60
     @State private var showCategories: Bool = false
 
     private var requestManager = RequestManager()
@@ -43,7 +43,7 @@ struct ContentView: View {
                             .listRowInsets(EdgeInsets())
                             .buttonStyle(PlainButtonStyle())
                             .sheet(item: $selectedCategory) { (categoryName: CategoryName) in
-                                GameView(showCategories: $showCategories, selectedCategory: .constant(categoryName.name), timerDuration: $timerDuration)
+                                GameView(showCategories: $showCategories, selectedCategory: .constant(categoryName.name), timerDuration: $timerDuration, playAsTeams: $playAsTeams)
                             }
                         }
                     }
