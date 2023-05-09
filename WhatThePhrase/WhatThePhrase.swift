@@ -3,6 +3,7 @@ import SwiftUI
 @main
 struct WhatThePhraseApp: App {
     @State private var showLaunchScreen = true
+    @UIApplicationDelegateAdaptor(FirebaseDelegate.self) var firebaseDelegate
 
     var body: some Scene {
         WindowGroup {

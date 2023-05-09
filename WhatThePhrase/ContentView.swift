@@ -1,4 +1,5 @@
 import SwiftUI
+import Firebase
 
 public struct Category: Identifiable {
     public let id = UUID()
@@ -30,6 +31,7 @@ struct ContentView: View {
                         ForEach(categories) { category in
                             Button(action: {
                                 selectedCategory = CategoryName(name: category.name)
+                                Analytics.logEvent("category_selected", parameters: ["category_name": category.name])
                             }) {
                                 Text(category.name)
                                     .font(.title2)
