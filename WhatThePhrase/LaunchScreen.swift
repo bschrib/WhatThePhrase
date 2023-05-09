@@ -3,13 +3,14 @@ import SwiftUI
 struct LaunchScreen: View {
     var body: some View {
         GeometryReader { geometry in
-            VStack {
-                Spacer()
+            ZStack {
+                Color.white.edgesIgnoringSafeArea(.all) // Change this to the background color of your image
+                
                 Image("LaunchImage")
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: geometry.size.width, height: geometry.size.height)
-                Spacer()
+                    .clipped()
             }
         }
         .edgesIgnoringSafeArea(.all)

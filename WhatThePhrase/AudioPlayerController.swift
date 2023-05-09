@@ -7,7 +7,7 @@ class AudioPlayerController: NSObject, AVAudioPlayerDelegate, ObservableObject {
     func playSound(filename: String, fileExtension: String) {
         guard let url = Bundle.main.url(forResource: filename, withExtension: fileExtension) else { return }
         do {
-            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: .duckOthers)
             try AVAudioSession.sharedInstance().setActive(true)
             
             player = try AVAudioPlayer(contentsOf: url)

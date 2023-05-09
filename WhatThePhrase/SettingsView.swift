@@ -6,6 +6,11 @@ struct SettingsView: View {
 
     @Environment(\.dismiss) var dismiss
 
+    func resetToDefaultSettings() {
+        playAsTeams = true
+        timerDuration = 60
+    }
+
     var body: some View {
         NavigationView {
             Form {
@@ -22,6 +27,11 @@ struct SettingsView: View {
                     ))
                     .keyboardType(.numberPad)
                 }
+
+                Button(action: resetToDefaultSettings) {
+                    Text("Return To Default Settings")
+                        .foregroundColor(.red)
+                }
             }
             .navigationTitle("Settings")
             .navigationBarItems(trailing:
@@ -32,7 +42,6 @@ struct SettingsView: View {
         }
     }
 }
-
 
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {

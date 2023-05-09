@@ -196,19 +196,24 @@ public struct GameView: View {
                             }
                         }
                         .padding(.top, 20)
-            .alert(isPresented: $showAlert) {
-                let message: String
-                if team1Score > team2Score {
-                    message = "Team 1 won!"
-                } else if team1Score < team2Score {
-                    message = "Team 2 won!"
-                } else {
-                    message = "It's a tie!"
-                }
-                return Alert(title: Text("Time's Up!"),
-                             message: Text(message),
-                             dismissButton: .default(Text("OK")))
-            }
+                        .alert(isPresented: $showAlert) {
+                            let message: String
+                            if playAsTeams {
+                                if team1Score > team2Score {
+                                    message = "Team 1 won!"
+                                } else if team1Score < team2Score {
+                                    message = "Team 2 won!"
+                                } else {
+                                    message = "It's a tie!"
+                                }
+                            } else {
+                                message = "You scored \(team1Score) points!"
+                            }
+                            return Alert(title: Text("Time's Up!"),
+                                         message: Text(message),
+                                         dismissButton: .default(Text("OK")))
+                        }
+
 
             Button(action: {
                 presentationMode.wrappedValue.dismiss()
