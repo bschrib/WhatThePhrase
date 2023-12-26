@@ -8,6 +8,26 @@
 import XCTest
 
 final class WhatThePhraseUITests: XCTestCase {
+    let app = XCUIApplication()
+    
+    func testTakeScreenshots() {
+      let app = XCUIApplication()
+      setupSnapshot(app)
+      app.launch()
+        
+      snapshot("01CategoryView")
+      app.scrollViews.otherElements.buttons["Places & Spaces"].tap()
+      app.buttons["Start"].tap()
+      snapshot("02GameView")
+      app.buttons["Team 2"].tap()
+      let stopButton = app.buttons["Stop"]
+      stopButton.tap()
+      snapshot("03GameViewComplete")
+      let okButton = app.alerts["Time's Up!"].scrollViews.otherElements.buttons["OK"]
+      okButton.tap()
+      app.navigationBars["Select Category"]/*@START_MENU_TOKEN@*/.buttons["gearshape"]/*[[".otherElements[\"gearshape\"].buttons[\"gearshape\"]",".buttons[\"gearshape\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+      snapshot("04SettingsView")
+    }
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.

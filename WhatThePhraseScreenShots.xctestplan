@@ -1,0 +1,29 @@
+{
+  "configurations" : [
+    {
+      "id" : "3843A069-F5D5-4CAF-87FD-BEC4534DA44A",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:WhatThePhrase.xcodeproj",
+      "identifier" : "405B0C1E29EB95AB0001F479",
+      "name" : "WhatThePhrase"
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:WhatThePhrase.xcodeproj",
+        "identifier" : "40424EFA29F088F8000178C0",
+        "name" : "WhatThePhraseUIScreenshotTests"
+      }
+    }
+  ],
+  "version" : 1
+}
