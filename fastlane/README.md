@@ -45,6 +45,14 @@ Create ipa
 
 
 
+### screenshots
+
+```sh
+[bundle exec] fastlane screenshots
+```
+
+Generate new localized screenshots
+
 ### generate_app
 
 ```sh
@@ -73,6 +81,14 @@ Create ipa
 ```
 
 Push a new beta build to TestFlight
+
+### ios release
+
+```sh
+[bundle exec] fastlane ios release
+```
+
+Submit a new build to the App Store
 
 ----
 

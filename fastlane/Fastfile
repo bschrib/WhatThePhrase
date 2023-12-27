@@ -13,6 +13,11 @@
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
 
+require 'json'
+
+config_path = "/Users/tytalus/Documents/XCodeApps/WhatThePhrase/projectConfig.json" # Update this path
+config = JSON.parse(File.read(config_path))
+
 default_platform(:ios)
 
 platform :ios do
@@ -23,7 +28,7 @@ platform :ios do
   desc "Push a new beta build to TestFlight"
   lane :beta do
     build
-    pilot  
+    pilot
   end
 end
 
@@ -43,6 +48,28 @@ desc "Create ipa"
     gym
 end
 
+platform :ios do
+  app_store_connect_api_key(
+    key_id: config["APP_STORE_CONNECT_API_KEY_KEY_ID"],
+    issuer_id: config["APP_STORE_CONNECT_API_KEY_ISSUER_ID"],
+    is_key_content_base64: config["is_key_content_base64"],
+    key_content: config["APP_STORE_CONNECT_API_KEY_KEY"],
+    in_house: config["APP_STORE_CONNECT_API_KEY_IN_HOUSE"] == "true"
+  )
+  desc "Submit a new build to the App Store"
+  lane :release do
+    build
+    screenshots
+    upload_to_testflight(skip_waiting_for_build_processing: true)
+    upload_to_app_store(
+      skip_metadata: false,
+      skip_screenshots: false,
+      skip_binary_upload: false,
+      submit_for_review: true
+    )
+  end
+end
+
 lane :generate_appicon do
   appicon(appicon_image_file: '/Users/tytalus/Documents/XCodeApps/WhatThePhrase/WhatThePhrase/Assets/Images/AppIcon.png',
              appicon_devices: [:ipad, :iphone, :ios_marketing],
@@ -51,6 +78,11 @@ end
 
 lane :develop do
   build_app(scheme: "Development")
+end
+
+desc "Generate new localized screenshots"
+lane :screenshots do
+  snapshot
 end
 
 lane :generate_app do
@@ -71,4 +103,5 @@ lane :generate_launch_image do
     appicon_name: "LaunchImage"
   )
 end
+
 
