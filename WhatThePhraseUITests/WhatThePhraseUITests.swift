@@ -26,6 +26,7 @@ final class WhatThePhraseUITests: XCTestCase {
         
       let okButton = app.alerts["Time's Up!"].scrollViews.otherElements.buttons["OK"]
       okButton.tap()
+      app.buttons["Go Back To Categories"].tap()
       app.navigationBars["Select Category"]/*@START_MENU_TOKEN@*/.buttons["gearshape"]/*[[".otherElements[\"gearshape\"].buttons[\"gearshape\"]",".buttons[\"gearshape\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
         await snapshot("04SettingsView")
     }
