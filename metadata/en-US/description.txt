@@ -1,0 +1,1 @@
+A trivia game that is played with as a group or as two teams where you try to get the person(s) to say the word for a given category, and see who can score the most points in that time!

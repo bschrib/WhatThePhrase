@@ -1,0 +1,40 @@
+app_identifier("com.roguedeveloper.WhatThePhrase")
+username("bschrib@gmail.com")
+app_version("1.0") # Make sure this matches the version in your App Store Connect
+metadata_path("./metadata")
+screenshots_path("./fastlane/screenshots")
+skip_metadata(false)
+skip_screenshots(false)
+automatic_release(true)
+price_tier(0)
+copyright "#{Time.now.year} Brandon Schreiber"
+app_rating_config_path "./metadata/rating.json"
+
+privacy_url(
+  'en-US' => 'https://whatthephrase.roguedeveloper.net/privacy.html'
+)
+support_url(
+  'en-US' => 'https://whatthephrase.roguedeveloper.net/support.html'
+)
+
+submission_information({
+  export_compliance_uses_encryption: false,
+  content_rights_contains_third_party_content: false,
+  add_id_info_uses_idfa: false,
+  add_id_info_serves_ads: false,
+  add_id_info_tracks_action: true,
+  add_id_info_tracks_install: true,
+  add_id_info_limits_tracking: false,
+  content_rights_has_rights: true,
+  export_compliance_encryption_updated: false,
+  export_compliance_compliance_required: false,
+  export_compliance_platform: "ios"
+})
+
+app_review_information({
+  first_name: "Brandon",
+  last_name: "Schreiber",
+  phone_number: "+16143305245",
+  email_address: "brandon@roguedeveloper.net",
+  notes: ":)"
+})

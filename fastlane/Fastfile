@@ -59,13 +59,13 @@ platform :ios do
   desc "Submit a new build to the App Store"
   lane :release do
     build
-    screenshots
-    upload_to_testflight(skip_waiting_for_build_processing: true)
     upload_to_app_store(
       skip_metadata: false,
       skip_screenshots: false,
       skip_binary_upload: false,
-      submit_for_review: true
+      submit_for_review: true,
+      precheck_include_in_app_purchases: false,
+      force: true
     )
   end
 end
