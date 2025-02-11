@@ -6,6 +6,7 @@ public struct GameView: View {
     @Binding var selectedCategory: String?
     @Binding var timerDuration: Int
     @Binding var playAsTeams: Bool
+    @Binding var kidMode: Bool
     @State private var showAlert: Bool = false
     @State private var isGameRunning: Bool = false
     @State private var currentWord: String = ""
@@ -16,12 +17,22 @@ public struct GameView: View {
     @StateObject private var audioPlayerController = AudioPlayerController()
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
 
+    var requestManager = RequestManager()
+
+    init(showCategories: Binding<Bool>, selectedCategory: Binding<String?>, timerDuration: Binding<Int>, playAsTeams: Binding<Bool>, kidMode: Binding<Bool>) {
+        self._showCategories = showCategories
+        self._selectedCategory = selectedCategory
+        self._timerDuration = timerDuration
+        self._playAsTeams = playAsTeams
+        self._kidMode = kidMode
+        self.requestManager.setKidMode(kidMode.wrappedValue)
+    }
+
     private var timeRemainingFormatted: String {
         let minutes = timeRemaining / 60
         let seconds = timeRemaining % 60
         return String(format: "%02d:%02d", minutes, seconds)
     }
-    var requestManager = RequestManager()
 
     func playBuzzSound() {
         audioPlayerController.playSound(filename: "buzz", fileExtension: "wav")
@@ -237,11 +248,14 @@ public struct GameView: View {
         .onChange(of: timerDuration) { newValue in
             timeRemaining = newValue
         }
+        .onChange(of: kidMode) { newValue in
+            requestManager.setKidMode(newValue)
+        }
     }
 }
 
 struct GameView_Previews: PreviewProvider {
     static var previews: some View {
-        GameView(showCategories: .constant(false), selectedCategory: .constant("Sample Category"), timerDuration: .constant(60), playAsTeams: .constant(false))
+        GameView(showCategories: .constant(false), selectedCategory: .constant("Sample Category"), timerDuration: .constant(60), playAsTeams: .constant(false), kidMode: .constant(false))
     }
 }

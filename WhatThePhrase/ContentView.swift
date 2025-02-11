@@ -16,6 +16,7 @@ struct ContentView: View {
     @State private var showSettings: Bool = false
     @AppStorage("playAsTeams") private var playAsTeams: Bool = true
     @AppStorage("timerDuration") private var timerDuration: Int = 60
+    @AppStorage("kidMode") private var kidMode: Bool = false
     @State private var showCategories: Bool = false
 
     private var requestManager = RequestManager()
@@ -45,7 +46,7 @@ struct ContentView: View {
                             .listRowInsets(EdgeInsets())
                             .buttonStyle(PlainButtonStyle())
                             .sheet(item: $selectedCategory) { (categoryName: CategoryName) in
-                                GameView(showCategories: $showCategories, selectedCategory: .constant(categoryName.name), timerDuration: $timerDuration, playAsTeams: $playAsTeams)
+                                GameView(showCategories: $showCategories, selectedCategory: .constant(categoryName.name), timerDuration: $timerDuration, playAsTeams: $playAsTeams, kidMode: $kidMode)
                             }
                         }
                     }
