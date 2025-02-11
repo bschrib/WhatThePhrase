@@ -2,6 +2,7 @@ import Foundation
 import Combine
 
 class RequestManager {
+    private let domain = "com.roguedeveloper.WhatThePhrase"
     private var usedWords: [String: Set<String>] = [:]
     private var kidMode = false
 
@@ -46,7 +47,7 @@ class RequestManager {
 
     func asyncGetRandomWord(category: String) async throws -> String {
         guard !kidMode || kidFriendlyCategories.contains(category) else {
-            throw NSError(domain: "com.roguedeveloper.WhatThePhrase", code: -1, userInfo: [NSLocalizedDescriptionKey: "Category not available in kid mode"])
+            throw NSError(domain: domain, code: -1, userInfo: [NSLocalizedDescriptionKey: "Category not available in kid mode"])
         }
 
         let wordlists = loadLocalWordlists()
@@ -57,10 +58,10 @@ class RequestManager {
                 usedWords[category, default: []].insert(randomWord)
                 return randomWord
             } else {
-                throw NSError(domain: "com.roguedeveloper.WhatThePhrase", code: -1, userInfo: [NSLocalizedDescriptionKey: "No words found"])
+                throw NSError(domain: domain, code: -1, userInfo: [NSLocalizedDescriptionKey: "No words found"])
             }
         } else {
-            throw NSError(domain: "com.roguedeveloper.WhatThePhrase", code: -1, userInfo: [NSLocalizedDescriptionKey: "No words found"])
+            throw NSError(domain: domain, code: -1, userInfo: [NSLocalizedDescriptionKey: "No words found"])
         }
     }
 
