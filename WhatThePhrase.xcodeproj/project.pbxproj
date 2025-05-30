@@ -47,7 +47,7 @@
 
 /* Begin PBXFileReference section */
 		4009DE112A005E7700C448F6 /* AppIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppIcon.png; sourceTree = "<group>"; };
-		4009DE172A00616900C448F6 /* AppLaunchScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = AppLaunchScreen.png; path = ../../../../../../Downloads/AppLaunchScreen.png; sourceTree = "<group>"; };
+		4009DE172A00616900C448F6 /* AppLaunchScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = AppLaunchScreen.png; path = AppLaunchScreen.png; sourceTree = "<group>"; };
 		4009DE192A00AB9C00C448F6 /* AppLaunchScreen@1x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppLaunchScreen@1x.png"; sourceTree = "<group>"; };
 		4009DE1A2A00AB9C00C448F6 /* AppLaunchScreen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppLaunchScreen@2x.png"; sourceTree = "<group>"; };
 		400AD9DF29ED05EE0092B66D /* AudioPlayerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerController.swift; sourceTree = "<group>"; };
