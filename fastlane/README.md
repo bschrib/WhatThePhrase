@@ -13,65 +13,6 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 # Available Actions
 
-### sync_certificates
-
-```sh
-[bundle exec] fastlane sync_certificates
-```
-
-Sync certificates
-
-### build
-
-```sh
-[bundle exec] fastlane build
-```
-
-Create ipa
-
-### generate_appicon
-
-```sh
-[bundle exec] fastlane generate_appicon
-```
-
-
-
-### develop
-
-```sh
-[bundle exec] fastlane develop
-```
-
-
-
-### screenshots
-
-```sh
-[bundle exec] fastlane screenshots
-```
-
-Generate new localized screenshots
-
-### generate_app
-
-```sh
-[bundle exec] fastlane generate_app
-```
-
-
-
-### generate_launch_image
-
-```sh
-[bundle exec] fastlane generate_launch_image
-```
-
-
-
-----
-
-
 ## iOS
 
 ### ios beta
@@ -81,14 +22,6 @@ Generate new localized screenshots
 ```
 
 Push a new beta build to TestFlight
-
-### ios release
-
-```sh
-[bundle exec] fastlane ios release
-```
-
-Submit a new build to the App Store
 
 ----
 

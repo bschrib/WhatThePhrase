@@ -13,95 +13,93 @@
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
 
-require 'json'
-
-config_path = "/Users/tytalus/Documents/XCodeApps/WhatThePhrase/projectConfig.json" # Update this path
-config = JSON.parse(File.read(config_path))
-
 default_platform(:ios)
 
 platform :ios do
-  app_store_connect_api_key(
-    is_key_content_base64: true
-  )
-  
   desc "Push a new beta build to TestFlight"
   lane :beta do
-    build
-    pilot
+    increment_build_number(xcodeproj: "WhatThePhrase.xcodeproj")
+    build_app(scheme: "WhatThePhrase")
+    upload_to_testflight
   end
 end
 
-desc "Sync certificates"
-  lane :sync_certificates do
-    #read-only disables match from overriding the existing certificates.
-    match({readonly: true, type: "appstore"})
-end
+#platform :ios do
+#  desc "Push a new beta build to TestFlight"
+#  lane :beta do
+#    build
+#    pilot
+#  end
+#end
 
-desc "Create ipa"
-  lane :build do
-    #update profiles
-    sync_certificates
-    # Increases the build number by 1
-    increment_build_number
-    # Creates a signed file
-    gym
-end
-
-platform :ios do
-  app_store_connect_api_key(
-    key_id: config["APP_STORE_CONNECT_API_KEY_KEY_ID"],
-    issuer_id: config["APP_STORE_CONNECT_API_KEY_ISSUER_ID"],
-    is_key_content_base64: config["is_key_content_base64"],
-    key_content: config["APP_STORE_CONNECT_API_KEY_KEY"],
-    in_house: config["APP_STORE_CONNECT_API_KEY_IN_HOUSE"] == "true"
-  )
-  desc "Submit a new build to the App Store"
-  lane :release do
-    build
-    upload_to_app_store(
-      skip_metadata: false,
-      skip_screenshots: false,
-      skip_binary_upload: false,
-      submit_for_review: true,
-      precheck_include_in_app_purchases: false,
-      force: true
-    )
-  end
-end
-
-lane :generate_appicon do
-  appicon(appicon_image_file: '/Users/tytalus/Documents/XCodeApps/WhatThePhrase/WhatThePhrase/Assets/Images/AppIcon.png',
-             appicon_devices: [:ipad, :iphone, :ios_marketing],
-             appicon_path: "WhatThePhrase/Assets.xcassets")
-end
-
-lane :develop do
-  build_app(scheme: "Development")
-end
-
-desc "Generate new localized screenshots"
-lane :screenshots do
-  snapshot
-end
-
-lane :generate_app do
-  xcodebuild(
-        configuration: build_config[:configuration],
-        scheme: build_config[:scheme],
-        workspace: build_config[:xcode_workspace],
-        xcargs: "-quiet -sdk 'iphonesimulator' -destination 'generic/platform=iOS Simulator'",
-        derivedDataPath: IOS_DERIVED_DATA_PATH # this will contain the .app which we need later on
-  )
-end
-
-lane :generate_launch_image do
-  appicon(
-    appicon_image_file: "WhatThePhrase/Assets/Images/AppLaunchScreen.png",
-    appicon_devices: [:iphone],
-    appicon_path: "WhatThePhrase/Assets.xcassets",
-    appicon_name: "LaunchImage"
-  )
-end
-
-
+#desc "Sync certificates"
+#  lane :sync_certificates do
+#    #read-only disables match from overriding the existing certificates.
+#    match({readonly: true, type: "appstore"})
+#end
+#
+#desc "Create ipa"
+#  lane :build do
+#    #update profiles
+#    sync_certificates
+#    # Increases the build number by 1
+#    increment_build_number
+#    # Creates a signed file
+#    gym
+#end
+#
+#platform :ios do
+#  app_store_connect_api_key(
+#    key_id: config["APP_STORE_CONNECT_API_KEY_KEY_ID"],
+#    issuer_id: config["APP_STORE_CONNECT_API_KEY_ISSUER_ID"],
+#    is_key_content_base64: config["is_key_content_base64"],
+#    key_content: config["APP_STORE_CONNECT_API_KEY_KEY"],
+#    in_house: config["APP_STORE_CONNECT_API_KEY_IN_HOUSE"] == "true"
+#  )
+#  desc "Submit a new build to the App Store"
+#  lane :release do
+#    build
+#    upload_to_app_store(
+#      skip_metadata: false,
+#      skip_screenshots: false,
+#      skip_binary_upload: false,
+#      submit_for_review: true,
+#      precheck_include_in_app_purchases: false,
+#      force: true
+#    )
+#  end
+#end
+#
+#lane :generate_appicon do
+#  appicon(appicon_image_file: '/Users/tytalus/Documents/XCodeApps/WhatThePhrase/WhatThePhrase/Assets/Images/AppIcon.png',
+#             appicon_devices: [:ipad, :iphone, :ios_marketing],
+#             appicon_path: "WhatThePhrase/Assets.xcassets")
+#end
+#
+#lane :develop do
+#  build_app(scheme: "Development")
+#end
+#
+#desc "Generate new localized screenshots"
+#lane :screenshots do
+#  snapshot
+#end
+#
+#lane :generate_app do
+#  xcodebuild(
+#        configuration: build_config[:configuration],
+#        scheme: build_config[:scheme],
+#        workspace: build_config[:xcode_workspace],
+#        xcargs: "-quiet -sdk 'iphonesimulator' -destination 'generic/platform=iOS Simulator'",
+#        derivedDataPath: IOS_DERIVED_DATA_PATH # this will contain the .app which we need later on
+#  )
+#end
+#
+#lane :generate_launch_image do
+#  appicon(
+#    appicon_image_file: "WhatThePhrase/Assets/Images/AppLaunchScreen.png",
+#    appicon_devices: [:iphone],
+#    appicon_path: "WhatThePhrase/Assets.xcassets",
+#    appicon_name: "LaunchImage"
+#  )
+#end
