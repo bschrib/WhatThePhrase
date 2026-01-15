@@ -15,7 +15,7 @@
 
 require 'json'
 
-config_path = "/Users/tytalus/Documents/XCodeApps/WhatThePhrase/projectConfig.json" # Update this path
+config_path = File.expand_path("../projectConfig.json", __dir__) # Relative path to project root
 config = JSON.parse(File.read(config_path))
 
 default_platform(:ios)
@@ -71,7 +71,7 @@ platform :ios do
 end
 
 lane :generate_appicon do
-  appicon(appicon_image_file: '/Users/tytalus/Documents/XCodeApps/WhatThePhrase/WhatThePhrase/Assets/Images/AppIcon.png',
+  appicon(appicon_image_file: File.expand_path("../WhatThePhrase/Assets/Images/AppIcon.png", __dir__),
              appicon_devices: [:ipad, :iphone, :ios_marketing],
              appicon_path: "WhatThePhrase/Assets.xcassets")
 end

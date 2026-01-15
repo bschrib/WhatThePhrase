@@ -116,3 +116,13 @@ fastlane/test_output
 # https://github.com/johnno1962/injectionforxcode
 
 iOSInjectionProject/
+
+# Project configuration with sensitive credentials
+projectConfig.json
+
+# Apple API keys
+*.p8
+AuthKey_*.p8
+
+# Distribution certificates (if stored locally)
+*.p12
