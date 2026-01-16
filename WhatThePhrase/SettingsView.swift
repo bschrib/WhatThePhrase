@@ -3,22 +3,28 @@ import SwiftUI
 struct SettingsView: View {
     @Binding var playAsTeams: Bool
     @Binding var timerDuration: Int
-    @Binding var kidMode: Bool
-
+    @Binding var isKidsMode: Bool
+    @StateObject private var requestManager = RequestManager.shared
+    
     @Environment(\.dismiss) var dismiss
 
     func resetToDefaultSettings() {
         playAsTeams = true
         timerDuration = 60
-        kidMode = false
+        isKidsMode = false
     }
 
     var body: some View {
         NavigationView {
             Form {
-                Toggle("Play As Teams", isOn: $playAsTeams)
-
-                Toggle("Kid Mode", isOn: $kidMode)
+                Section(header: Text("Game Mode")) {
+                    Toggle("Kids Mode", isOn: $isKidsMode)
+                        .onChange(of: isKidsMode) { newValue in
+                            requestManager.isKidsMode = newValue
+                            requestManager.resetUsedWords()
+                        }
+                    Toggle("Play As Teams", isOn: $playAsTeams)
+                }
 
                 Section(header: Text("Duration (seconds)")) {
                     TextField("Enter duration", text: Binding(
@@ -49,6 +55,6 @@ struct SettingsView: View {
 
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        SettingsView(playAsTeams: .constant(true), timerDuration: .constant(60), kidMode: .constant(false))
+        SettingsView(playAsTeams: .constant(true), timerDuration: .constant(60), isKidsMode: .constant(false))
     }
 }

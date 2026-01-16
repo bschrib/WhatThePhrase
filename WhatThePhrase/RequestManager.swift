@@ -1,71 +1,170 @@
 import Foundation
 import Combine
 
-class RequestManager {
-    private let domain = "com.roguedeveloper.WhatThePhrase"
+class RequestManager: ObservableObject {
+    static let shared = RequestManager()
+    
     private var usedWords: [String: Set<String>] = [:]
-    private var kidMode = false
-
-    let kidFriendlyCategories: [String] = [
+    private let queue = DispatchQueue(label: "com.whatthephrase.requestmanager", attributes: .concurrent)
+    @Published var isKidsMode: Bool = false
+    
+    private init() {}
+    
+    private let kidsCategories: [String] = [
+        "Animals",
+        "Food",
+        "Toys & Games",
+        "Home",
+        "Nature"
+    ]
+    
+    private let regularCategories: [String] = [
         "Places & Spaces",
+        "Travel & Transit",
         "Household Items",
+        "Cuisine & Beverages",
         "Life On Earth",
         "Relatives & Relations",
+        "Random",
+        "Gadgets & Innovations",
+        "Past Chronicles",
+        "Pop Culture",
         "Games & Contests"
     ]
-
+    
     var categories: [String] {
-        kidMode ? kidFriendlyCategories : [
-            "Places & Spaces",
-            "Travel & Transit",
-            "Household Items",
-            "Cuisine & Beverages",
-            "Life On Earth",
-            "Relatives & Relations",
-            "Random",
-            "Gadgets & Innovations",
-            "Past Chronicles",
-            "Pop Culture",
-            "Games & Contests"
-        ]
+        return isKidsMode ? kidsCategories : regularCategories
     }
-
-    func setKidMode(_ enabled: Bool) {
-        kidMode = enabled
-    }
-
+    
     func loadLocalWordlists() -> [String: [String]] {
-        if let url = Bundle.main.url(forResource: "wordlists", withExtension: "json"),
-           let data = try? Data(contentsOf: url) {
-            let decoder = JSONDecoder()
-            if let wordlists = try? decoder.decode([String: [String]].self, from: data) {
-                return wordlists
-            }
+        let filename = isKidsMode ? "kids_wordlists" : "wordlists"
+        print("\n📂 Loading wordlist: \(filename)")
+        
+        // Fallback word lists
+        let fallbackWordlists: [String: [String]] = isKidsMode ? [
+            "Animals": ["cat", "dog", "bird", "fish", "frog", "bear", "lion", "duck", "cow", "pig"],
+            "Food": ["apple", "banana", "pizza", "cake", "milk", "juice", "bread", "cheese", "egg", "rice"],
+            "Toys & Games": ["ball", "doll", "car", "block", "puzzle", "cards", "swing", "slide", "bike", "dice"],
+            "Home": ["bed", "chair", "table", "door", "window", "light", "bath", "sink", "sofa", "lamp"],
+            "Nature": ["tree", "flower", "grass", "sun", "moon", "star", "rain", "snow", "wind", "rock"]
+        ] : [
+            "Places & Spaces": ["beach", "mountain", "city", "park", "school", "home", "store", "restaurant", "airport", "hospital"],
+            "Travel & Transit": ["car", "bus", "train", "airplane", "bicycle", "taxi", "subway", "boat", "scooter", "walking"],
+            "Household Items": ["chair", "table", "lamp", "couch", "bed", "desk", "shelf", "mirror", "clock", "picture"],
+            "Cuisine & Beverages": ["pizza", "hamburger", "salad", "soup", "sandwich", "coffee", "tea", "juice", "water", "soda"],
+            "Life On Earth": ["tree", "flower", "ocean", "mountain", "river", "animal", "bird", "fish", "insect", "plant"]
+        ]
+        
+        // First try to load from main bundle
+        guard let url = Bundle.main.url(forResource: filename, withExtension: "json") else {
+            print("⚠️ Could not find \(filename).json in main bundle - using fallback word lists")
+            print("📝 Fallback categories: \(fallbackWordlists.keys.sorted())")
+            return fallbackWordlists
         }
-        return [:]
+        
+        do {
+            print("📄 Found \(filename).json at: \(url.path)")
+            let data = try Data(contentsOf: url)
+            let wordlists = try JSONDecoder().decode([String: [String]].self, from: data)
+            
+            // Validate that we have categories and words
+            if wordlists.isEmpty {
+                print("⚠️ Loaded empty wordlist from \(filename).json - using fallback")
+                return fallbackWordlists
+            }
+            
+            // Log each category and word count
+            print("📊 Loaded categories and word counts:")
+            for (category, words) in wordlists.sorted(by: { $0.key < $1.key }) {
+                print("   - \(category): \(words.count) words")
+                if words.isEmpty {
+                    print("⚠️ Category '\(category)' has no words - using fallback")
+                    return fallbackWordlists
+                }
+            }
+            
+            print("✅ Successfully loaded \(wordlists.count) categories from \(filename).json")
+            return wordlists
+            
+        } catch {
+            print("⚠️ Error loading \(filename).json: \(error.localizedDescription)")
+            print("📝 Using fallback word lists with categories: \(fallbackWordlists.keys.sorted())")
+            return fallbackWordlists
+        }
     }
 
     func asyncGetRandomWord(category: String) async throws -> String {
-        guard !kidMode || kidFriendlyCategories.contains(category) else {
-            throw NSError(domain: domain, code: -1, userInfo: [NSLocalizedDescriptionKey: "Category not available in kid mode"])
-        }
-
+        print("\n=== Getting random word for category: \(category) ===")
         let wordlists = loadLocalWordlists()
         
-        if let words = wordlists[category] {
-            let unusedWords = words.filter { !usedWords[category, default: []].contains($0) }
-            if let randomWord = unusedWords.randomElement() {
-                usedWords[category, default: []].insert(randomWord)
-                return randomWord
-            } else {
-                throw NSError(domain: domain, code: -1, userInfo: [NSLocalizedDescriptionKey: "No words found"])
+        // Debug: Print available categories and word counts
+        print("📋 Available categories in wordlists: \(wordlists.keys.sorted())")
+        print("🔍 Looking for category: '\(category)'")
+        
+        // Debug: Print current used words state
+        print("📝 Current used words state:")
+        queue.sync {
+            for (cat, words) in usedWords {
+                print("   - \(cat): \(words.count) words used")
             }
-        } else {
-            throw NSError(domain: domain, code: -1, userInfo: [NSLocalizedDescriptionKey: "No words found"])
+        }
+        
+        // First try to get a word from the specified category
+        guard let words = wordlists[category] as? [String], !words.isEmpty else {
+            print("❌ No words found in category '\(category)'")
+            throw NSError(domain: "com.whatthephrase", code: 1, userInfo: [NSLocalizedDescriptionKey: "No words found in category \(category)"])
+        }
+        
+        print("✅ Found \(words.count) words in category '\(category)'")
+        
+        // Thread-safe access to usedWords
+        return try await withCheckedThrowingContinuation { continuation in
+            queue.async(flags: .barrier) { [weak self] in
+                guard let self = self else {
+                    continuation.resume(throwing: NSError(domain: "com.whatthephrase", code: 2, userInfo: [NSLocalizedDescriptionKey: "RequestManager deallocated"]))
+                    return
+                }
+                
+                // Filter out used words
+                let used = self.usedWords[category, default: []]
+                let unusedWords = words.filter { !used.contains($0) }
+                
+                print("   - \(unusedWords.count) unused words available")
+                
+                if !unusedWords.isEmpty {
+                    let randomWord = unusedWords.randomElement()!
+                    self.usedWords[category, default: []].insert(randomWord)
+                    print("🎯 Selected word: '\(randomWord)' from unused words")
+                    continuation.resume(returning: randomWord)
+                } else {
+                    print("⚠️ No unused words left in category '\(category)' - resetting used words")
+                    // Reset used words for this category and try again
+                    self.usedWords[category] = []
+                    if let randomWord = words.randomElement() {
+                        self.usedWords[category] = [randomWord]
+                        print("🔄 Reset used words and selected: '\(randomWord)'")
+                        continuation.resume(returning: randomWord)
+                    } else {
+                        continuation.resume(throwing: NSError(domain: "com.whatthephrase", code: 3, userInfo: [NSLocalizedDescriptionKey: "Failed to select a word"]))
+                    }
+                }
+            }
         }
     }
 
     func resetUsedWords() {
-        usedWords.removeAll()
+        queue.async(flags: .barrier) { [weak self] in
+            self?.usedWords.removeAll()
+        }
+    }
+    
+    func setKidsMode(_ enabled: Bool) {
+        isKidsMode = enabled
+        resetUsedWords()
+    }
+    
+    func preloadWordlists() {
+        // This forces the wordlists to be loaded and cached
+        _ = loadLocalWordlists()
     }
 }

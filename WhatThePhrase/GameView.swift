@@ -6,27 +6,20 @@ public struct GameView: View {
     @Binding var selectedCategory: String?
     @Binding var timerDuration: Int
     @Binding var playAsTeams: Bool
-    @Binding var kidMode: Bool
+    @Binding var isKidsMode: Bool
     @State private var showAlert: Bool = false
     @State private var isGameRunning: Bool = false
-    @State private var currentWord: String = ""
+    @State private var currentWord: String = "TAP TO START"
+    @State private var hasLoadedInitialWord = false
     @State private var timer: Timer? = nil
     @State private(set) var timeRemaining: Int = 60
     @State private var team1Score: Int = 0
     @State private var team2Score: Int = 0
+    @State private var hasGameStarted: Bool = false
+    @State private var isLoading: Bool = false
     @StateObject private var audioPlayerController = AudioPlayerController()
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-
-    var requestManager = RequestManager()
-
-    init(showCategories: Binding<Bool>, selectedCategory: Binding<String?>, timerDuration: Binding<Int>, playAsTeams: Binding<Bool>, kidMode: Binding<Bool>) {
-        self._showCategories = showCategories
-        self._selectedCategory = selectedCategory
-        self._timerDuration = timerDuration
-        self._playAsTeams = playAsTeams
-        self._kidMode = kidMode
-        self.requestManager.setKidMode(kidMode.wrappedValue)
-    }
+    @StateObject private var requestManager = RequestManager.shared
 
     private var timeRemainingFormatted: String {
         let minutes = timeRemaining / 60
@@ -40,13 +33,23 @@ public struct GameView: View {
 
     private func startGame() {
         isGameRunning = true
+        hasGameStarted = true
         requestManager.resetUsedWords()
         timeRemaining = timerDuration
         team1Score = 0
         team2Score = 0
+        hasLoadedInitialWord = false
+        
+        // Load the first word
         Task {
+            await MainActor.run {
+                self.isLoading = true
+                self.currentWord = ""
+            }
             try? await asyncUpdateWord(category: selectedCategory ?? "")
         }
+        
+        // Start the timer
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             timeRemaining -= 1
             if timeRemaining == 0 {
@@ -62,6 +65,23 @@ public struct GameView: View {
         showAlert = true
         playBuzzSound()
         timer?.invalidate()
+    }
+
+    private func nextWord() {
+        guard isGameRunning else { return }
+        isLoading = true
+        Task {
+            do {
+                try await asyncUpdateWord(category: selectedCategory ?? "")
+            } catch {
+                await MainActor.run {
+                    currentWord = "TAP TO START"
+                    isLoading = false
+                    isGameRunning = false
+                    hasGameStarted = false
+                }
+            }
+        }
     }
 
     private func pass() async {
@@ -109,19 +129,60 @@ public struct GameView: View {
     }
     
     @MainActor
-    func asyncUpdateWord(category: String) async throws {
+    private func asyncUpdateWord(category: String) async {
+        await MainActor.run {
+            self.isLoading = true
+            // Only clear the word if we already have a word loaded
+            if hasLoadedInitialWord {
+                self.currentWord = ""
+            }
+        }
+        
         do {
-            currentWord = try await requestManager.asyncGetRandomWord(category: selectedCategory ?? "")
+            let word = try await requestManager.asyncGetRandomWord(category: category)
+            await MainActor.run {
+                self.currentWord = word.uppercased()
+                self.isLoading = false
+                self.hasLoadedInitialWord = true
+            }
         } catch {
-            print("Error fetching word: \(error.localizedDescription)")
+            print("❌ Error getting random word: \(error.localizedDescription)")
+            // Try to get any word from any category as a fallback
+            do {
+                // Try to get any word from any category
+                let fallbackWord = try await requestManager.asyncGetRandomWord(category: "")
+                await MainActor.run {
+                    self.currentWord = fallbackWord.uppercased()
+                    self.isLoading = false
+                }
+            } catch {
+                // Last resort fallback
+                await MainActor.run {
+                    self.currentWord = "TAP TO START"
+                    self.isLoading = false
+                }
+            }
         }
     }
 
     public var body: some View {
         VStack(spacing: 20) {
+            if isLoading {
+                ProgressView()
+                    .scaleEffect(1.5)
+                    .padding()
+            }
             Text(selectedCategory ?? "")
                 .font(.largeTitle)
                 .fontWeight(.bold)
+                .onAppear {
+                    // Initialize the first word when the view appears
+                    Task {
+                        if currentWord.isEmpty {
+                            try? await asyncUpdateWord(category: selectedCategory ?? "")
+                        }
+                    }
+                }
 
             ZStack {
                 Text("placeholder")
@@ -154,35 +215,36 @@ public struct GameView: View {
                     .foregroundColor(.white)
                     .cornerRadius(10)
             }
+            .contentShape(Rectangle())
 
             if playAsTeams {
-                            HStack {
-                                teamButton(teamName: "Team 1", teamColor: Color.red, teamAction: {
-                                    Task {
-                                        await addPointToTeam1()
-                                    }
-                                })
-
-                                teamButton(teamName: "Team 2", teamColor: Color.green, teamAction: {
-                                    Task {
-                                        await addPointToTeam2()
-                                    }
-                                })
-                            }
-                        } else {
-                            Button(action: {
-                                Task {
-                                    await addPointToTeam1()
-                                }
-                            }) {
-                                Text("Correct")
-                                    .font(.system(size: 24))
-                                    .padding()
-                                    .background(Color.blue)
-                                    .foregroundColor(.white)
-                                    .cornerRadius(10)
-                            }
+                HStack {
+                    teamButton(teamName: "Team 1", teamColor: Color.red, teamAction: {
+                        Task {
+                            await addPointToTeam1()
                         }
+                    })
+
+                    teamButton(teamName: "Team 2", teamColor: Color.green, teamAction: {
+                        Task {
+                            await addPointToTeam2()
+                        }
+                    })
+                }
+            } else {
+                Button(action: {
+                    Task {
+                        await addPointToTeam1()
+                    }
+                }) {
+                    Text("Correct")
+                        .font(.system(size: 24))
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
+            }
 
             Button(action: {
                 Task {
@@ -241,21 +303,20 @@ public struct GameView: View {
         .padding()
         .onAppear {
             timeRemaining = timerDuration
-            Task {
-                try? await asyncUpdateWord(category: selectedCategory ?? "")
-            }
+            // Don't load words here - wait for game to start
         }
         .onChange(of: timerDuration) { newValue in
             timeRemaining = newValue
-        }
-        .onChange(of: kidMode) { newValue in
-            requestManager.setKidMode(newValue)
         }
     }
 }
 
 struct GameView_Previews: PreviewProvider {
     static var previews: some View {
-        GameView(showCategories: .constant(false), selectedCategory: .constant("Sample Category"), timerDuration: .constant(60), playAsTeams: .constant(false), kidMode: .constant(false))
+        GameView(showCategories: .constant(false), 
+                selectedCategory: .constant("Sample Category"), 
+                timerDuration: .constant(60), 
+                playAsTeams: .constant(false),
+                isKidsMode: .constant(false))
     }
 }

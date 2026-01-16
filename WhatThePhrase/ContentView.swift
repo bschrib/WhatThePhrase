@@ -1,27 +1,27 @@
 import SwiftUI
 import Firebase
 
-public struct Category: Identifiable {
-    public let id = UUID()
-    public let name: String
-}
-
-struct CategoryName: Identifiable {
-    let id = UUID()
-    let name: String
-}
-
 struct ContentView: View {
-    @State private var selectedCategory: CategoryName? = nil
+    @State private var selectedCategory: String? = nil
     @State private var showSettings: Bool = false
     @AppStorage("playAsTeams") private var playAsTeams: Bool = true
     @AppStorage("timerDuration") private var timerDuration: Int = 60
-    @AppStorage("kidMode") private var kidMode: Bool = false
-    @State private var showCategories: Bool = false
-
-    private var requestManager = RequestManager()
-    private var categories: [Category] {
-        requestManager.categories.map { Category(name: $0) }
+    @AppStorage("isKidsMode") private var isKidsMode: Bool = false
+    @State private var showGameView: Bool = false
+    @StateObject private var requestManager = RequestManager.shared
+    
+    private var categories: [String] {
+        requestManager.categories
+    }
+    
+    init() {
+        // Ensure the manager's kids mode is in sync with user defaults
+        let manager = RequestManager.shared
+        manager.isKidsMode = isKidsMode
+        // Preload wordlists in the background
+        DispatchQueue.global(qos: .userInitiated).async {
+            manager.preloadWordlists()
+        }
     }
     
     var body: some View {
@@ -29,12 +29,13 @@ struct ContentView: View {
             VStack {
                 ScrollView {
                     LazyVStack(spacing: 10) {
-                        ForEach(categories) { category in
+                        ForEach(categories, id: \.self) { category in
                             Button(action: {
-                                selectedCategory = CategoryName(name: category.name)
-                                Analytics.logEvent("category_selected", parameters: ["category_name": category.name])
+                                selectedCategory = category
+                                showGameView = true
+                                Analytics.logEvent("category_selected", parameters: ["category_name": category])
                             }) {
-                                Text(category.name)
+                                Text(category)
                                     .font(.title2)
                                     .fontWeight(.bold)
                                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -45,16 +46,24 @@ struct ContentView: View {
                             }
                             .listRowInsets(EdgeInsets())
                             .buttonStyle(PlainButtonStyle())
-                            .sheet(item: $selectedCategory) { (categoryName: CategoryName) in
-                                GameView(showCategories: $showCategories, selectedCategory: .constant(categoryName.name), timerDuration: $timerDuration, playAsTeams: $playAsTeams, kidMode: $kidMode)
-                            }
                         }
                     }
                     .padding(.horizontal)
                 }
             }
+            .sheet(isPresented: $showGameView) {
+                if let category = selectedCategory {
+                    GameView(showCategories: $showGameView,
+                            selectedCategory: .constant(category),
+                            timerDuration: $timerDuration,
+                            playAsTeams: $playAsTeams,
+                            isKidsMode: $isKidsMode)
+                }
+            }
             .sheet(isPresented: $showSettings) {
-                SettingsView(playAsTeams: $playAsTeams, timerDuration: $timerDuration)
+                SettingsView(playAsTeams: $playAsTeams, 
+                            timerDuration: $timerDuration, 
+                            isKidsMode: $isKidsMode)
             }
             .navigationTitle("Select Category")
             .navigationBarItems(trailing:
@@ -65,6 +74,19 @@ struct ContentView: View {
                         .font(.title)
                 }
             )
+        }
+        .onAppear {
+            // Ensure wordlists are loaded when view appears
+            RequestManager.shared.preloadWordlists()
+        }
+        .onChange(of: isKidsMode) { newValue in
+            let manager = RequestManager.shared
+            manager.isKidsMode = newValue
+            manager.resetUsedWords()
+            // Preload the new wordlists in the background
+            DispatchQueue.global(qos: .userInitiated).async {
+                manager.preloadWordlists()
+            }
         }
     }
 }

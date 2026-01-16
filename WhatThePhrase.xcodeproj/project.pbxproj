@@ -33,6 +33,7 @@
 		40B33F9E2A09C95A00E10CC2 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 40B33F9D2A09C95A00E10CC2 /* FirebaseCrashlytics */; };
 		40B33FA02A09CA5D00E10CC2 /* FirebaseDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40B33F9F2A09CA5D00E10CC2 /* FirebaseDelegate.swift */; };
 		40E86A3A29EB9D4B0039AF43 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E86A3929EB9D4B0039AF43 /* GameView.swift */; };
+		F51D6BD52DEFB024007C767C /* kids_wordlists.json in Resources */ = {isa = PBXBuildFile; fileRef = F51D6BD42DEFB024007C767C /* kids_wordlists.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,7 +48,7 @@
 
 /* Begin PBXFileReference section */
 		4009DE112A005E7700C448F6 /* AppIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppIcon.png; sourceTree = "<group>"; };
-		4009DE172A00616900C448F6 /* AppLaunchScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = AppLaunchScreen.png; path = ../../../../../../Downloads/AppLaunchScreen.png; sourceTree = "<group>"; };
+		4009DE172A00616900C448F6 /* AppLaunchScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppLaunchScreen.png; sourceTree = "<group>"; };
 		4009DE192A00AB9C00C448F6 /* AppLaunchScreen@1x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppLaunchScreen@1x.png"; sourceTree = "<group>"; };
 		4009DE1A2A00AB9C00C448F6 /* AppLaunchScreen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppLaunchScreen@2x.png"; sourceTree = "<group>"; };
 		400AD9DF29ED05EE0092B66D /* AudioPlayerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerController.swift; sourceTree = "<group>"; };
@@ -70,6 +71,7 @@
 		40B33F912A09C8A800E10CC2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		40B33F9F2A09CA5D00E10CC2 /* FirebaseDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseDelegate.swift; sourceTree = "<group>"; };
 		40E86A3929EB9D4B0039AF43 /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
+		F51D6BD42DEFB024007C767C /* kids_wordlists.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = kids_wordlists.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -162,6 +164,7 @@
 		4080B9FF29EDFDC500CC7642 /* WordLists */ = {
 			isa = PBXGroup;
 			children = (
+				F51D6BD42DEFB024007C767C /* kids_wordlists.json */,
 				4080BA0129EE041000CC7642 /* wordlists.json */,
 			);
 			path = WordLists;
@@ -305,6 +308,7 @@
 				40A46E0329EC562500081BFF /* buzz.wav in Resources */,
 				4080BA0229EE041000CC7642 /* wordlists.json in Resources */,
 				405B0C2729EB95AC0001F479 /* Assets.xcassets in Resources */,
+				F51D6BD52DEFB024007C767C /* kids_wordlists.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -376,7 +380,7 @@
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 66;
+				CURRENT_PROJECT_VERSION = 78;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = E328JY49Z9;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -397,7 +401,7 @@
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 66;
+				CURRENT_PROJECT_VERSION = 78;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = E328JY49Z9;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -534,7 +538,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 66;
+				CURRENT_PROJECT_VERSION = 78;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"WhatThePhrase/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
@@ -547,11 +551,12 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.roguedeveloper.WhatThePhrase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -572,7 +577,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 66;
+				CURRENT_PROJECT_VERSION = 78;
 				DEVELOPMENT_ASSET_PATHS = "\"WhatThePhrase/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = E328JY49Z9;
@@ -584,11 +589,12 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.roguedeveloper.WhatThePhrase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
