@@ -1,7 +1,0 @@
-{
-    "APP_STORE_CONNECT_API_KEY_KEY_ID": "<your-key-id>",
-    "APP_STORE_CONNECT_API_KEY_ISSUER_ID": "<your-issuer-id>",
-    "APP_STORE_CONNECT_API_KEY_KEY": "<base64-encoded-p8-key>",
-    "is_key_content_base64": true,
-    "APP_STORE_CONNECT_API_KEY_IN_HOUSE": "false"
-}

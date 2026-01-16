@@ -15,13 +15,14 @@
 
 default_platform(:ios)
 
-platform :ios do
-  desc "Push a new beta build to TestFlight"
-  lane :beta do
-    increment_build_number(xcodeproj: "WhatThePhrase.xcodeproj")
-    build_app(scheme: "WhatThePhrase")
-    upload_to_testflight
-  end
+desc "Push a new beta build to TestFlight"
+lane :beta do
+  # 1. Fetch and install the certificates and profiles from your private repo
+  match(type: "appstore") 
+
+  increment_build_number(xcodeproj: "WhatThePhrase.xcodeproj")
+  build_app(scheme: "WhatThePhrase")
+  upload_to_testflight
 end
 
 #platform :ios do
