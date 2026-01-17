@@ -11,6 +11,7 @@ struct SettingsView: View {
     func resetToDefaultSettings() {
         playAsTeams = true
         timerDuration = 60
+        isKidsMode = false
     }
 
     var body: some View {

@@ -17,6 +17,10 @@ A fun and engaging word guessing game for iOS, perfect for parties, family gathe
   - [Publishing to TestFlight](#publishing-to-testflight)
   - [Publishing to the App Store](#publishing-to-the-app-store)
   - [Code Signing with Match](#code-signing-with-match)
+- [Codemagic CI/CD](#codemagic-cicd)
+  - [Available Workflows](#available-workflows)
+  - [Setting Up Codemagic](#setting-up-codemagic)
+  - [Environment Variables](#environment-variables)
 - [Project Structure](#project-structure)
 - [Customization](#customization)
 - [Testing](#testing)
@@ -250,6 +254,71 @@ bundle exec fastlane match development
 
 ---
 
+## Codemagic CI/CD
+
+This project includes [Codemagic](https://codemagic.io/) configuration for automated builds and deployments. The configuration is defined in `codemagic.yaml`.
+
+### Available Workflows
+
+| Workflow | Trigger | Description |
+|----------|---------|-------------|
+| `ios-develop` | Pull Requests | Builds the app for development/testing |
+| `ios-beta` | Push to `main` or `release/*` | Builds and deploys to TestFlight |
+| `ios-release` | Tags matching `v*` | Builds and submits to App Store |
+| `ios-fastlane-beta` | Push to `fastlane-beta` | Alternative beta workflow using Fastlane |
+
+### Setting Up Codemagic
+
+1. **Connect your repository** to Codemagic at [codemagic.io](https://codemagic.io/)
+
+2. **Configure environment variable groups** in Codemagic settings:
+
+   - `app_store_credentials` - App Store Connect API credentials
+   - `match_credentials` - Fastlane Match credentials (if using Match)
+   - `fastlane_credentials` - Fastlane-specific credentials (for Fastlane workflow)
+
+3. **Set up code signing** in Codemagic:
+   - Go to your app settings → Code signing → iOS
+   - Upload your certificates and provisioning profiles, OR
+   - Use automatic code signing with App Store Connect API
+
+### Environment Variables
+
+Create these environment variable groups in Codemagic:
+
+#### `app_store_credentials`
+| Variable | Description |
+|----------|-------------|
+| `APP_STORE_CONNECT_KEY_IDENTIFIER` | App Store Connect API Key ID |
+| `APP_STORE_CONNECT_ISSUER_ID` | App Store Connect Issuer ID |
+| `APP_STORE_CONNECT_PRIVATE_KEY` | App Store Connect API Private Key (`.p8` contents) |
+
+#### `match_credentials` (if using Fastlane Match)
+| Variable | Description |
+|----------|-------------|
+| `MATCH_PASSWORD` | Password for Match certificate encryption |
+| `MATCH_GIT_BASIC_AUTHORIZATION` | Base64-encoded `username:token` for Match git repo |
+
+#### `fastlane_credentials` (for Fastlane workflow)
+| Variable | Description |
+|----------|-------------|
+| `FASTLANE_USER` | Apple ID email |
+| `FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD` | App-specific password |
+
+### Triggering Builds
+
+- **Pull Requests**: Automatically triggers `ios-develop` workflow
+- **Push to main**: Automatically triggers `ios-beta` workflow (TestFlight)
+- **Create a tag**: Tag with `v1.2.3` format triggers `ios-release` workflow (App Store)
+
+```bash
+# Example: Create a release
+git tag v1.2.0
+git push origin v1.2.0
+```
+
+---
+
 ## Project Structure
 
 ```
@@ -283,7 +352,8 @@ WhatThePhrase/
 ├── Gemfile                     # Ruby dependencies
 ├── Gemfile.lock                # Locked gem versions
 ├── .ruby-version               # Ruby version (3.2.10)
-└── fastlane.op                 # 1Password environment file
+├── fastlane.op                 # 1Password environment file
+└── codemagic.yaml              # Codemagic CI/CD configuration
 ```
 
 ### Key Files

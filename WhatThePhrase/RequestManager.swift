@@ -150,46 +150,12 @@ class RequestManager: ObservableObject {
                 }
             }
         }
-        
-        // If we get here, try to find any word from any category
-        print("⚠️ Couldn't find word in category '\(category)' - trying any available word")
-        
-        return try await withCheckedThrowingContinuation { continuation in
-            queue.async(flags: .barrier) { [weak self] in
-                guard let self = self else {
-                    continuation.resume(throwing: NSError(domain: "com.whatthephrase", code: 2, userInfo: [NSLocalizedDescriptionKey: "RequestManager deallocated"]))
-                    return
-                }
-                
-                for (cat, catWords) in wordlists {
-                    if let words = catWords as? [String], !words.isEmpty {
-                        let used = self.usedWords[cat, default: []]
-                        let unusedWords = words.filter { !used.contains($0) }
-                        
-                        if let randomWord = unusedWords.randomElement() {
-                            self.usedWords[cat, default: []].insert(randomWord)
-                            print("🎲 Selected random word '\(randomWord)' from category '\(cat)'")
-                            continuation.resume(returning: randomWord)
-                            return
-                        } else if let randomWord = words.randomElement() {
-                            self.usedWords[cat] = [randomWord] // Reset and use one word
-                            print("🔄 Reset and selected random word '\(randomWord)' from category '\(cat)'")
-                            continuation.resume(returning: randomWord)
-                            return
-                        }
-                    }
-                }
-                
-                // Last resort: return a default word based on the mode
-                let defaultWord = self.isKidsMode ? "rainbow" : "word"
-                print("⚠️ No words available at all - using fallback word: '\(defaultWord)'")
-                continuation.resume(returning: defaultWord)
-            }
-        }
     }
 
     func resetUsedWords() {
-        usedWords.removeAll()
+        queue.async(flags: .barrier) { [weak self] in
+            self?.usedWords.removeAll()
+        }
     }
     
     func setKidsMode(_ enabled: Bool) {

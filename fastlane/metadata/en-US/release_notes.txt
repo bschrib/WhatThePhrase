@@ -1,0 +1,2 @@
+- Added Kids Mode with age-appropriate word categories for younger players
+- Bug fixes and performance improvements

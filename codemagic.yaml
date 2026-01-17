@@ -1,0 +1,318 @@
+# Codemagic CI/CD Configuration for WhatThePhrase
+# Documentation: https://docs.codemagic.io/yaml/yaml-getting-started/
+
+definitions:
+  # Reusable environment variables
+  environment: &env
+    xcode: latest
+    cocoapods: default
+  
+  # Common scripts
+  scripts:
+    - &install_ruby_deps
+      name: Install Ruby dependencies
+      script: |
+        # Install bundler if needed
+        gem install bundler --no-document
+        # Install gems from Gemfile
+        bundle install --path vendor/bundle
+    
+    - &setup_match_signing
+      name: Set up code signing with Match
+      script: |
+        # Match will fetch certificates and provisioning profiles from the git repo
+        bundle exec fastlane match appstore --readonly
+    
+    - &increment_build_number
+      name: Increment build number
+      script: |
+        # Use Codemagic build number
+        cd $CM_BUILD_DIR
+        agvtool new-version -all $(($(app-store-connect get-latest-testflight-build-number "$APP_STORE_APP_ID") + 1))
+
+workflows:
+  # ============================================
+  # Development Build - Triggered on PRs
+  # ============================================
+  ios-develop:
+    name: iOS Development Build
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    
+    environment:
+      <<: *env
+      groups:
+        - app_store_credentials  # Contains APP_STORE_CONNECT_KEY_IDENTIFIER, APP_STORE_CONNECT_ISSUER_ID, APP_STORE_CONNECT_PRIVATE_KEY
+        - match_credentials      # Contains MATCH_PASSWORD, MATCH_GIT_BASIC_AUTHORIZATION
+      vars:
+        XCODE_SCHEME: "WhatThePhrase"
+        XCODE_PROJECT: "WhatThePhrase.xcodeproj"
+        BUNDLE_ID: "com.roguedeveloper.WhatThePhrase"
+      ios_signing:
+        distribution_type: development
+        bundle_identifier: com.roguedeveloper.WhatThePhrase
+    
+    triggering:
+      events:
+        - pull_request
+      branch_patterns:
+        - pattern: '*'
+          include: true
+      cancel_previous_builds: true
+    
+    scripts:
+      - *install_ruby_deps
+      
+      - name: Set up keychain
+        script: |
+          keychain initialize
+      
+      - name: Fetch signing files
+        script: |
+          app-store-connect fetch-signing-files "$BUNDLE_ID" \
+            --type IOS_APP_DEVELOPMENT \
+            --create
+      
+      - name: Set up signing
+        script: |
+          keychain add-certificates
+          xcode-project use-profiles
+      
+      - name: Build iOS app
+        script: |
+          xcode-project build-ipa \
+            --project "$XCODE_PROJECT" \
+            --scheme "$XCODE_SCHEME" \
+            --config Debug \
+            --archive-flags="-destination 'generic/platform=iOS'"
+    
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
+    
+    publishing:
+      email:
+        recipients:
+          - bschrib@gmail.com
+        notify:
+          success: false
+          failure: true
+
+  # ============================================
+  # Beta Build - Deploy to TestFlight
+  # ============================================
+  ios-beta:
+    name: iOS Beta (TestFlight)
+    max_build_duration: 90
+    instance_type: mac_mini_m2
+    
+    environment:
+      <<: *env
+      groups:
+        - app_store_credentials
+        - match_credentials
+      vars:
+        XCODE_SCHEME: "WhatThePhrase"
+        XCODE_PROJECT: "WhatThePhrase.xcodeproj"
+        BUNDLE_ID: "com.roguedeveloper.WhatThePhrase"
+        APP_STORE_APP_ID: "6449228447"  # Update with your App Store app ID
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.roguedeveloper.WhatThePhrase
+    
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: 'main'
+          include: true
+        - pattern: 'release/*'
+          include: true
+      cancel_previous_builds: true
+    
+    scripts:
+      - *install_ruby_deps
+      
+      - name: Set up keychain
+        script: |
+          keychain initialize
+      
+      - name: Fetch signing files
+        script: |
+          app-store-connect fetch-signing-files "$BUNDLE_ID" \
+            --type IOS_APP_STORE \
+            --create
+      
+      - name: Set up signing
+        script: |
+          keychain add-certificates
+          xcode-project use-profiles
+      
+      - name: Increment build number
+        script: |
+          cd $CM_BUILD_DIR
+          LATEST_BUILD_NUMBER=$(app-store-connect get-latest-testflight-build-number "$APP_STORE_APP_ID" || echo "0")
+          agvtool new-version -all $((LATEST_BUILD_NUMBER + 1))
+      
+      - name: Build iOS app for App Store
+        script: |
+          xcode-project build-ipa \
+            --project "$XCODE_PROJECT" \
+            --scheme "$XCODE_SCHEME" \
+            --config Release \
+            --archive-flags="-destination 'generic/platform=iOS'"
+    
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
+    
+    publishing:
+      email:
+        recipients:
+          - bschrib@gmail.com
+        notify:
+          success: true
+          failure: true
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+        beta_groups:
+          - Internal Testers
+        submit_to_app_store: false
+
+  # ============================================
+  # Release Build - Deploy to App Store
+  # ============================================
+  ios-release:
+    name: iOS Release (App Store)
+    max_build_duration: 120
+    instance_type: mac_mini_m2
+    
+    environment:
+      <<: *env
+      groups:
+        - app_store_credentials
+        - match_credentials
+      vars:
+        XCODE_SCHEME: "WhatThePhrase"
+        XCODE_PROJECT: "WhatThePhrase.xcodeproj"
+        BUNDLE_ID: "com.roguedeveloper.WhatThePhrase"
+        APP_STORE_APP_ID: "6449228447"  # Update with your App Store app ID
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.roguedeveloper.WhatThePhrase
+    
+    triggering:
+      events:
+        - tag
+      tag_patterns:
+        - pattern: 'v*'
+          include: true
+    
+    scripts:
+      - *install_ruby_deps
+      
+      - name: Set up keychain
+        script: |
+          keychain initialize
+      
+      - name: Fetch signing files
+        script: |
+          app-store-connect fetch-signing-files "$BUNDLE_ID" \
+            --type IOS_APP_STORE \
+            --create
+      
+      - name: Set up signing
+        script: |
+          keychain add-certificates
+          xcode-project use-profiles
+      
+      - name: Set version from tag
+        script: |
+          cd $CM_BUILD_DIR
+          # Extract version from tag (e.g., v1.2.3 -> 1.2.3)
+          VERSION=${CM_TAG#v}
+          agvtool new-marketing-version $VERSION
+          
+          # Increment build number
+          LATEST_BUILD_NUMBER=$(app-store-connect get-latest-app-store-build-number "$APP_STORE_APP_ID" || echo "0")
+          agvtool new-version -all $((LATEST_BUILD_NUMBER + 1))
+      
+      - name: Build iOS app for App Store
+        script: |
+          xcode-project build-ipa \
+            --project "$XCODE_PROJECT" \
+            --scheme "$XCODE_SCHEME" \
+            --config Release \
+            --archive-flags="-destination 'generic/platform=iOS'"
+    
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
+    
+    publishing:
+      email:
+        recipients:
+          - bschrib@gmail.com
+        notify:
+          success: true
+          failure: true
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: false
+        submit_to_app_store: true
+
+  # ============================================
+  # Fastlane Beta - Alternative using Fastlane
+  # ============================================
+  ios-fastlane-beta:
+    name: iOS Beta via Fastlane
+    max_build_duration: 90
+    instance_type: mac_mini_m2
+    
+    environment:
+      <<: *env
+      groups:
+        - app_store_credentials
+        - match_credentials
+        - fastlane_credentials  # Contains FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD, FASTLANE_USER
+      vars:
+        XCODE_SCHEME: "WhatThePhrase"
+        BUNDLE_ID: "com.roguedeveloper.WhatThePhrase"
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.roguedeveloper.WhatThePhrase
+    
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: 'fastlane-beta'
+          include: true
+    
+    scripts:
+      - *install_ruby_deps
+      
+      - name: Set up keychain
+        script: |
+          keychain initialize
+      
+      - name: Run Fastlane Beta
+        script: |
+          bundle exec fastlane beta
+    
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - fastlane/report.xml
+    
+    publishing:
+      email:
+        recipients:
+          - bschrib@gmail.com
+        notify:
+          success: true
+          failure: true

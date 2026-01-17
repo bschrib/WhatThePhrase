@@ -13,41 +13,6 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 # Available Actions
 
-### upload_screenshots
-
-```sh
-[bundle exec] fastlane upload_screenshots
-```
-
-Upload only screenshots (no build)
-
-### develop
-
-```sh
-[bundle exec] fastlane develop
-```
-
-Build for local development
-
-### generate_appicon
-
-```sh
-[bundle exec] fastlane generate_appicon
-```
-
-
-
-### generate_launch_image
-
-```sh
-[bundle exec] fastlane generate_launch_image
-```
-
-
-
-----
-
-
 ## iOS
 
 ### ios beta
@@ -65,6 +30,38 @@ Push a new beta build to TestFlight
 ```
 
 Push a new build to the App Store (Public Release)
+
+### ios upload_screenshots
+
+```sh
+[bundle exec] fastlane ios upload_screenshots
+```
+
+Upload only screenshots (no build)
+
+### ios develop
+
+```sh
+[bundle exec] fastlane ios develop
+```
+
+Build for local development
+
+### ios generate_appicon
+
+```sh
+[bundle exec] fastlane ios generate_appicon
+```
+
+
+
+### ios generate_launch_image
+
+```sh
+[bundle exec] fastlane ios generate_launch_image
+```
+
+
 
 ----
 

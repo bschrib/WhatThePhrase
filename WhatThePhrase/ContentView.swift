@@ -1,13 +1,17 @@
 import SwiftUI
 import Firebase
 
+struct CategorySelection: Identifiable {
+    let id = UUID()
+    let name: String
+}
+
 struct ContentView: View {
-    @State private var selectedCategory: String? = nil
+    @State private var selectedCategoryItem: CategorySelection? = nil
     @State private var showSettings: Bool = false
     @AppStorage("playAsTeams") private var playAsTeams: Bool = true
     @AppStorage("timerDuration") private var timerDuration: Int = 60
     @AppStorage("isKidsMode") private var isKidsMode: Bool = false
-    @State private var showGameView: Bool = false
     @StateObject private var requestManager = RequestManager.shared
     
     private var categories: [String] {
@@ -31,8 +35,7 @@ struct ContentView: View {
                     LazyVStack(spacing: 10) {
                         ForEach(categories, id: \.self) { category in
                             Button(action: {
-                                selectedCategory = category
-                                showGameView = true
+                                selectedCategoryItem = CategorySelection(name: category)
                                 Analytics.logEvent("category_selected", parameters: ["category_name": category])
                             }) {
                                 Text(category)
@@ -51,14 +54,16 @@ struct ContentView: View {
                     .padding(.horizontal)
                 }
             }
-            .sheet(isPresented: $showGameView) {
-                if let category = selectedCategory {
-                    GameView(showCategories: $showGameView,
-                            selectedCategory: .constant(category),
-                            timerDuration: $timerDuration,
-                            playAsTeams: $playAsTeams,
-                            isKidsMode: $isKidsMode)
-                }
+            .sheet(item: $selectedCategoryItem) { categoryItem in
+                GameView(showCategories: Binding(
+                    get: { selectedCategoryItem != nil },
+                    set: { if !$0 { selectedCategoryItem = nil } }
+                ),
+                selectedCategory: .constant(categoryItem.name),
+                timerDuration: $timerDuration,
+                playAsTeams: $playAsTeams,
+                isKidsMode: $isKidsMode)
+                .presentationDetents([.large])
             }
             .sheet(isPresented: $showSettings) {
                 SettingsView(playAsTeams: $playAsTeams, 

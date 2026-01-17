@@ -17,6 +17,8 @@ public struct GameView: View {
     @State private var team2Score: Int = 0
     @State private var hasGameStarted: Bool = false
     @State private var isLoading: Bool = false
+    @State private var wordRequestId = UUID()
+    @State private var wordRequestTask: Task<Void, Never>?
     @StateObject private var audioPlayerController = AudioPlayerController()
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @StateObject private var requestManager = RequestManager.shared
@@ -31,9 +33,15 @@ public struct GameView: View {
         audioPlayerController.playSound(filename: "buzz", fileExtension: "wav")
     }
 
+    private func cancelWordRequest() {
+        wordRequestTask?.cancel()
+        wordRequestTask = nil
+    }
+
     private func startGame() {
         isGameRunning = true
         hasGameStarted = true
+        cancelWordRequest()
         requestManager.resetUsedWords()
         timeRemaining = timerDuration
         team1Score = 0
@@ -44,9 +52,9 @@ public struct GameView: View {
         Task {
             await MainActor.run {
                 self.isLoading = true
-                self.currentWord = ""
+                self.currentWord = "TAP TO START"
             }
-            try? await asyncUpdateWord(category: selectedCategory ?? "")
+            await requestNextWord(category: selectedCategory ?? "")
         }
         
         // Start the timer
@@ -65,40 +73,32 @@ public struct GameView: View {
         showAlert = true
         playBuzzSound()
         timer?.invalidate()
+        cancelWordRequest()
     }
 
     private func nextWord() {
         guard isGameRunning else { return }
         isLoading = true
         Task {
-            do {
-                try await asyncUpdateWord(category: selectedCategory ?? "")
-            } catch {
-                await MainActor.run {
-                    currentWord = "TAP TO START"
-                    isLoading = false
-                    isGameRunning = false
-                    hasGameStarted = false
-                }
-            }
+            await requestNextWord(category: selectedCategory ?? "")
         }
     }
 
     private func pass() async {
-        try? await asyncUpdateWord(category: selectedCategory ?? "")
+        await requestNextWord(category: selectedCategory ?? "")
     }
 
     private func addPointToTeam1() async {
         if isGameRunning {
             team1Score += 1
-            try? await asyncUpdateWord(category: selectedCategory ?? "")
+            await requestNextWord(category: selectedCategory ?? "")
         }
     }
 
     private func addPointToTeam2() async {
         if isGameRunning {
             team2Score += 1
-            try? await asyncUpdateWord(category: selectedCategory ?? "")
+            await requestNextWord(category: selectedCategory ?? "")
         }
     }
 
@@ -128,71 +128,73 @@ public struct GameView: View {
         }
     }
     
+    /// Requests a new word for the given category. Generates a new request ID to
+    /// cancel any in-flight requests and ensure only the latest word is displayed.
     @MainActor
-    private func asyncUpdateWord(category: String) async {
-        await MainActor.run {
-            self.isLoading = true
-            // Only clear the word if we already have a word loaded
-            if hasLoadedInitialWord {
-                self.currentWord = ""
-            }
+    private func requestNextWord(category: String) async {
+        let requestId = UUID()
+        wordRequestId = requestId
+        cancelWordRequest()
+        wordRequestTask = Task { [requestId] in
+            await asyncUpdateWord(category: category, requestId: requestId)
+        }
+        await wordRequestTask?.value
+    }
+    
+    @MainActor
+    private func asyncUpdateWord(category: String, requestId: UUID) async {
+        // Guard: if this request is already stale, bail out
+        guard requestId == wordRequestId else { return }
+        
+        self.isLoading = true
+        // Only clear the word if we already have a word loaded
+        if hasLoadedInitialWord {
+            self.currentWord = ""
         }
         
         do {
             let word = try await requestManager.asyncGetRandomWord(category: category)
-            await MainActor.run {
-                self.currentWord = word.uppercased()
-                self.isLoading = false
-                self.hasLoadedInitialWord = true
-            }
+            // Guard: check again after await in case a newer request came in
+            guard requestId == wordRequestId else { return }
+            self.currentWord = word.uppercased()
+            self.isLoading = false
+            self.hasLoadedInitialWord = true
         } catch {
+            // Guard: check before handling error
+            guard requestId == wordRequestId else { return }
             print("❌ Error getting random word: \(error.localizedDescription)")
             // Try to get any word from any category as a fallback
             do {
-                // Try to get any word from any category
                 let fallbackWord = try await requestManager.asyncGetRandomWord(category: "")
-                await MainActor.run {
-                    self.currentWord = fallbackWord.uppercased()
-                    self.isLoading = false
-                }
+                guard requestId == wordRequestId else { return }
+                self.currentWord = fallbackWord.uppercased()
+                self.isLoading = false
             } catch {
+                guard requestId == wordRequestId else { return }
                 // Last resort fallback
-                await MainActor.run {
-                    self.currentWord = "TAP TO START"
-                    self.isLoading = false
-                }
+                self.currentWord = "TAP TO START"
+                self.isLoading = false
             }
         }
     }
 
     public var body: some View {
         VStack(spacing: 20) {
-            if isLoading {
-                ProgressView()
-                    .scaleEffect(1.5)
-                    .padding()
-            }
+            ProgressView()
+                .scaleEffect(1.5)
+                .padding()
+                .opacity(isLoading ? 1 : 0)
+                .frame(height: 50)
             Text(selectedCategory ?? "")
                 .font(.largeTitle)
                 .fontWeight(.bold)
-                .onAppear {
-                    // Initialize the first word when the view appears
-                    Task {
-                        if currentWord.isEmpty {
-                            try? await asyncUpdateWord(category: selectedCategory ?? "")
-                        }
-                    }
-                }
 
             ZStack {
-                Text("placeholder")
+                let displayWord = isGameRunning
+                    ? (currentWord.isEmpty ? "TAP TO START" : currentWord)
+                    : "TAP TO START"
+                Text(displayWord)
                     .font(.system(size:24))
-                    .opacity(0) // Set opacity to 0 to make it invisible
-                
-                if isGameRunning {
-                    Text(currentWord)
-                        .font(.system(size:24))
-                }
             }
             .padding(.bottom, 5)
 
@@ -307,6 +309,9 @@ public struct GameView: View {
         }
         .onChange(of: timerDuration) { newValue in
             timeRemaining = newValue
+        }
+        .onDisappear {
+            cancelWordRequest()
         }
     }
 }
