@@ -44,6 +44,19 @@
         "piano bench", "pillow", "recliner", "rocking chair", "shelf", "sideboard", "sofa", "stool", "table", "vanity",
         "wardrobe", "workbench"
     ],
+    "home": [
+        "alarm", "appliance", "attic", "basement", "basket", "bathtub", "blanket", "blender", "blinds", "bottle",
+        "bowl", "broom", "bucket", "candle", "carpet", "ceiling fan", "chandelier", "clock", "closet", "coffeemaker",
+        "comforter", "countertop", "cup", "curtain", "dishwasher", "door", "doorbell", "doorknob", "drawer", "dryer",
+        "dustpan", "fan", "faucet", "fireplace", "floor", "fork", "frame", "freezer", "garbage can", "glass",
+        "gutter", "hanger", "heater", "iron", "jar", "kettle", "key", "knife", "ladle", "light bulb",
+        "light switch", "lock", "mailbox", "mat", "microwave", "mirror", "mop", "mug", "napkin", "oven",
+        "pan", "pantry", "picture", "plate", "plunger", "pot", "rack", "radiator", "range", "refrigerator",
+        "remote control", "rug", "scale", "scissors", "shades", "shelf", "shower", "sink", "smoke detector", "soap",
+        "spatula", "sponge", "spoon", "staircase", "stove", "thermostat", "tile", "toaster", "toilet", "towel",
+        "trash can", "tray", "umbrella", "vacuum", "vase", "vent", "wall", "washing machine", "wastebasket", "window",
+        "windowsill"
+    ],
     "food": [
         "appetizer", "apple", "apricot", "artichoke", "asparagus", "avocado", "bacon", "bagel", "baked beans", "banana",
         "barbecue", "barley", "basil", "bean", "beef", "beer", "beet", "berry", "biscuit", "blackberry",
