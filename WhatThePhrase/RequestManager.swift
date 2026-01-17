@@ -55,6 +55,8 @@ final class RequestManager: ObservableObject {
     // Cache for merged wordlists to avoid reloading on every request
     private var cachedWordlists: [String: [String]]? = nil
     private var cachedMode: Bool? = nil
+    // Serial queue for thread-safe cache access
+    private let cacheQueue = DispatchQueue(label: "com.whatthephrase.cache")
     
     private init() {}
     
@@ -108,8 +110,8 @@ final class RequestManager: ObservableObject {
     }
     
     /// Loads word bank JSON (tag-based word collection)
-    private func loadWordBank() -> [String: [String]]? {
-        let filename = isKidsMode ? "kids_wordbank" : "wordbank"
+    private func loadWordBank(forKidsMode kidsMode: Bool) -> [String: [String]]? {
+        let filename = kidsMode ? "kids_wordbank" : "wordbank"
         
         guard let url = Bundle.main.url(forResource: filename, withExtension: "json") else {
             print("⚠️ Could not find \(filename).json in main bundle - word bank not available")
@@ -128,12 +130,12 @@ final class RequestManager: ObservableObject {
     }
     
     /// Merges base wordlists with tag-based word bank words
-    private func mergeWordlistsWithBank(baseWordlists: [String: [String]], wordBank: [String: [String]]?) -> [String: [String]] {
+    private func mergeWordlistsWithBank(baseWordlists: [String: [String]], wordBank: [String: [String]]?, forKidsMode kidsMode: Bool) -> [String: [String]] {
         guard let wordBank = wordBank else {
             return baseWordlists
         }
         
-        let tagMap = isKidsMode ? kidsCategoryTagMap : categoryTagMap
+        let tagMap = kidsMode ? kidsCategoryTagMap : categoryTagMap
         var mergedWordlists = baseWordlists
         
         // First pass: merge tags for all categories except Random
@@ -180,17 +182,25 @@ final class RequestManager: ObservableObject {
     }
     
     func loadLocalWordlists() -> [String: [String]] {
-        // Check cache first
-        if let cached = cachedWordlists, cachedMode == isKidsMode {
+        // Capture isKidsMode value for consistent use throughout the function
+        let currentMode = isKidsMode
+        
+        // Check cache first (thread-safe read)
+        if let cached = cacheQueue.sync(execute: { () -> [String: [String]]? in
+            if let cached = cachedWordlists, cachedMode == currentMode {
+                return cached
+            }
+            return nil
+        }) {
             print("📦 Using cached wordlists")
             return cached
         }
         
-        let filename = isKidsMode ? "kids_wordlists" : "wordlists"
+        let filename = currentMode ? "kids_wordlists" : "wordlists"
         print("\n📂 Loading wordlist: \(filename)")
         
         // Fallback word lists
-        let fallbackWordlists: [String: [String]] = isKidsMode ? [
+        let fallbackWordlists: [String: [String]] = currentMode ? [
             "Animals": ["cat", "dog", "bird", "fish", "frog", "bear", "lion", "duck", "cow", "pig"],
             "Food": ["apple", "banana", "pizza", "cake", "milk", "juice", "bread", "cheese", "egg", "rice"],
             "Toys & Games": ["ball", "doll", "car", "block", "puzzle", "cards", "swing", "slide", "bike", "dice"],
@@ -208,8 +218,10 @@ final class RequestManager: ObservableObject {
         guard let url = Bundle.main.url(forResource: filename, withExtension: "json") else {
             print("⚠️ Could not find \(filename).json in main bundle - using fallback word lists")
             print("📝 Fallback categories: \(fallbackWordlists.keys.sorted())")
-            cachedWordlists = fallbackWordlists
-            cachedMode = isKidsMode
+            cacheQueue.sync {
+                cachedWordlists = fallbackWordlists
+                cachedMode = currentMode
+            }
             return fallbackWordlists
         }
         
@@ -221,14 +233,16 @@ final class RequestManager: ObservableObject {
             // Validate that we have categories and words
             if baseWordlists.isEmpty {
                 print("⚠️ Loaded empty wordlist from \(filename).json - using fallback")
-                cachedWordlists = fallbackWordlists
-                cachedMode = isKidsMode
+                cacheQueue.sync {
+                    cachedWordlists = fallbackWordlists
+                    cachedMode = currentMode
+                }
                 return fallbackWordlists
             }
             
             // Load word bank and merge
-            let wordBank = loadWordBank()
-            let mergedWordlists = mergeWordlistsWithBank(baseWordlists: baseWordlists, wordBank: wordBank)
+            let wordBank = loadWordBank(forKidsMode: currentMode)
+            let mergedWordlists = mergeWordlistsWithBank(baseWordlists: baseWordlists, wordBank: wordBank, forKidsMode: currentMode)
             
             // Log each category and word count
             print("📊 Loaded categories and word counts (after merge):")
@@ -238,25 +252,31 @@ final class RequestManager: ObservableObject {
                 print("   - \(category): \(words.count) words (\(baseCount) base + \(addedCount) from word bank))")
                 if words.isEmpty {
                     print("⚠️ Category '\(category)' has no words - using fallback")
-                    cachedWordlists = fallbackWordlists
-                    cachedMode = isKidsMode
+                    cacheQueue.sync {
+                        cachedWordlists = fallbackWordlists
+                        cachedMode = currentMode
+                    }
                     return fallbackWordlists
                 }
             }
             
             print("✅ Successfully loaded \(mergedWordlists.count) categories (merged with word bank)")
             
-            // Cache the result
-            cachedWordlists = mergedWordlists
-            cachedMode = isKidsMode
+            // Cache the result (thread-safe write)
+            cacheQueue.sync {
+                cachedWordlists = mergedWordlists
+                cachedMode = currentMode
+            }
             
             return mergedWordlists
             
         } catch {
             print("⚠️ Error loading \(filename).json: \(error.localizedDescription)")
             print("📝 Using fallback word lists with categories: \(fallbackWordlists.keys.sorted())")
-            cachedWordlists = fallbackWordlists
-            cachedMode = isKidsMode
+            cacheQueue.sync {
+                cachedWordlists = fallbackWordlists
+                cachedMode = currentMode
+            }
             return fallbackWordlists
         }
     }
@@ -297,9 +317,11 @@ final class RequestManager: ObservableObject {
     func setKidsMode(_ enabled: Bool) {
         isKidsMode = enabled
         resetUsedWords()
-        // Clear cache when mode changes so new wordlists are loaded
-        cachedWordlists = nil
-        cachedMode = nil
+        // Clear cache when mode changes so new wordlists are loaded (thread-safe write)
+        cacheQueue.sync {
+            cachedWordlists = nil
+            cachedMode = nil
+        }
     }
     
     func preloadWordlists() {
