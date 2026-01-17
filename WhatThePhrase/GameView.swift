@@ -307,7 +307,7 @@ public struct GameView: View {
             timeRemaining = timerDuration
             // Don't load words here - wait for game to start
         }
-        .onChange(of: timerDuration) { newValue in
+        .onChange(of: timerDuration) { oldValue, newValue in
             timeRemaining = newValue
         }
         .onDisappear {

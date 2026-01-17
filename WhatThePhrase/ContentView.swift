@@ -9,6 +9,7 @@ struct CategorySelection: Identifiable {
 struct ContentView: View {
     @State private var selectedCategoryItem: CategorySelection? = nil
     @State private var showSettings: Bool = false
+    @State private var showInfo: Bool = false
     @AppStorage("playAsTeams") private var playAsTeams: Bool = true
     @AppStorage("timerDuration") private var timerDuration: Int = 60
     @AppStorage("isKidsMode") private var isKidsMode: Bool = false
@@ -70,21 +71,32 @@ struct ContentView: View {
                             timerDuration: $timerDuration, 
                             isKidsMode: $isKidsMode)
             }
+            .sheet(isPresented: $showInfo) {
+                InfoView()
+            }
             .navigationTitle("Select Category")
-            .navigationBarItems(trailing:
-                Button(action: {
-                    showSettings = true
-                }) {
-                    Image(systemName: "gearshape")
-                        .font(.title)
-                }
+            .navigationBarItems(
+                leading:
+                    Button(action: {
+                        showInfo = true
+                    }) {
+                        Image(systemName: "info.circle")
+                            .font(.title)
+                    },
+                trailing:
+                    Button(action: {
+                        showSettings = true
+                    }) {
+                        Image(systemName: "gearshape")
+                            .font(.title)
+                    }
             )
         }
         .onAppear {
             // Ensure wordlists are loaded when view appears
             RequestManager.shared.preloadWordlists()
         }
-        .onChange(of: isKidsMode) { newValue in
+        .onChange(of: isKidsMode) { oldValue, newValue in
             let manager = RequestManager.shared
             manager.isKidsMode = newValue
             manager.resetUsedWords()

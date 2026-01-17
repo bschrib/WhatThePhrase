@@ -1,2 +1,3 @@
-- Added Kids Mode with age-appropriate word categories for younger players
+- New "How to Play" info screen - tap the info icon to learn the rules and game modes
+- Kids Mode with age-appropriate word categories for younger players
 - Bug fixes and performance improvements

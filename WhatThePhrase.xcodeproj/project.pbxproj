@@ -33,6 +33,7 @@
 		40B33F9E2A09C95A00E10CC2 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 40B33F9D2A09C95A00E10CC2 /* FirebaseCrashlytics */; };
 		40B33FA02A09CA5D00E10CC2 /* FirebaseDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40B33F9F2A09CA5D00E10CC2 /* FirebaseDelegate.swift */; };
 		40E86A3A29EB9D4B0039AF43 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E86A3929EB9D4B0039AF43 /* GameView.swift */; };
+		40A46E0529EC562600081BFF /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40A46E0429EC562600081BFF /* InfoView.swift */; };
 		F51D6BD52DEFB024007C767C /* kids_wordlists.json in Resources */ = {isa = PBXBuildFile; fileRef = F51D6BD42DEFB024007C767C /* kids_wordlists.json */; };
 /* End PBXBuildFile section */
 
@@ -71,6 +72,7 @@
 		40B33F912A09C8A800E10CC2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		40B33F9F2A09CA5D00E10CC2 /* FirebaseDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseDelegate.swift; sourceTree = "<group>"; };
 		40E86A3929EB9D4B0039AF43 /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
+		40A46E0429EC562600081BFF /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
 		F51D6BD42DEFB024007C767C /* kids_wordlists.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = kids_wordlists.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -134,6 +136,7 @@
 				400AD9DF29ED05EE0092B66D /* AudioPlayerController.swift */,
 				405B0C2429EB95AB0001F479 /* ContentView.swift */,
 				40E86A3929EB9D4B0039AF43 /* GameView.swift */,
+				40A46E0429EC562600081BFF /* InfoView.swift */,
 				405B0C3829EB98830001F479 /* RequestManager.swift */,
 				40A46DFC29EC4A2A00081BFF /* SettingsView.swift */,
 				405B0C2629EB95AC0001F479 /* Assets.xcassets */,
@@ -356,6 +359,7 @@
 				40653A8129F4BD1100CB96AB /* LaunchScreenHostingController.swift in Sources */,
 				400AD9E029ED05EE0092B66D /* AudioPlayerController.swift in Sources */,
 				405B0C2529EB95AB0001F479 /* ContentView.swift in Sources */,
+				40A46E0529EC562600081BFF /* InfoView.swift in Sources */,
 				40A46DFD29EC4A2A00081BFF /* SettingsView.swift in Sources */,
 				405B0C3929EB98830001F479 /* RequestManager.swift in Sources */,
 				40653A7C29F46B9900CB96AB /* WhatThePhrase.swift in Sources */,
@@ -556,7 +560,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.roguedeveloper.WhatThePhrase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -594,7 +598,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.roguedeveloper.WhatThePhrase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

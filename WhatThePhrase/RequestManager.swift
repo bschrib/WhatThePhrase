@@ -1,11 +1,55 @@
 import Foundation
 import Combine
 
-class RequestManager: ObservableObject {
+final class UsedWordsStore: @unchecked Sendable {
+    private var usedWords: [String: Set<String>] = [:]
+    private let queue = DispatchQueue(label: "com.whatthephrase.usedwords", attributes: .concurrent)
+    
+    func getRandomWord(category: String, words: [String], continuation: CheckedContinuation<String, Error>) {
+        queue.async(flags: .barrier) {
+            // Filter out used words
+            let used = self.usedWords[category, default: []]
+            let unusedWords = words.filter { !used.contains($0) }
+            
+            print("   - \(unusedWords.count) unused words available")
+            
+            if !unusedWords.isEmpty {
+                let randomWord = unusedWords.randomElement()!
+                self.usedWords[category, default: []].insert(randomWord)
+                print("🎯 Selected word: '\(randomWord)' from unused words")
+                continuation.resume(returning: randomWord)
+            } else {
+                print("⚠️ No unused words left in category '\(category)' - resetting used words")
+                // Reset used words for this category and try again
+                self.usedWords[category] = []
+                if let randomWord = words.randomElement() {
+                    self.usedWords[category] = [randomWord]
+                    print("🔄 Reset used words and selected: '\(randomWord)'")
+                    continuation.resume(returning: randomWord)
+                } else {
+                    continuation.resume(throwing: NSError(domain: "com.whatthephrase", code: 3, userInfo: [NSLocalizedDescriptionKey: "Failed to select a word"]))
+                }
+            }
+        }
+    }
+    
+    func resetUsedWords() {
+        queue.async(flags: .barrier) {
+            self.usedWords.removeAll()
+        }
+    }
+    
+    func getUsedWordsState() -> [String: Set<String>] {
+        return queue.sync {
+            return usedWords
+        }
+    }
+}
+
+final class RequestManager: ObservableObject {
     static let shared = RequestManager()
     
-    private var usedWords: [String: Set<String>] = [:]
-    private let queue = DispatchQueue(label: "com.whatthephrase.requestmanager", attributes: .concurrent)
+    private let usedWordsStore = UsedWordsStore()
     @Published var isKidsMode: Bool = false
     
     private init() {}
@@ -103,59 +147,27 @@ class RequestManager: ObservableObject {
         
         // Debug: Print current used words state
         print("📝 Current used words state:")
-        queue.sync {
-            for (cat, words) in usedWords {
-                print("   - \(cat): \(words.count) words used")
-            }
+        let usedWordsState = usedWordsStore.getUsedWordsState()
+        for (cat, words) in usedWordsState {
+            print("   - \(cat): \(words.count) words used")
         }
         
         // First try to get a word from the specified category
-        guard let words = wordlists[category] as? [String], !words.isEmpty else {
+        guard let words = wordlists[category], !words.isEmpty else {
             print("❌ No words found in category '\(category)'")
             throw NSError(domain: "com.whatthephrase", code: 1, userInfo: [NSLocalizedDescriptionKey: "No words found in category \(category)"])
         }
         
         print("✅ Found \(words.count) words in category '\(category)'")
         
-        // Thread-safe access to usedWords
+        // Thread-safe access to usedWords via Sendable helper
         return try await withCheckedThrowingContinuation { continuation in
-            queue.async(flags: .barrier) { [weak self] in
-                guard let self = self else {
-                    continuation.resume(throwing: NSError(domain: "com.whatthephrase", code: 2, userInfo: [NSLocalizedDescriptionKey: "RequestManager deallocated"]))
-                    return
-                }
-                
-                // Filter out used words
-                let used = self.usedWords[category, default: []]
-                let unusedWords = words.filter { !used.contains($0) }
-                
-                print("   - \(unusedWords.count) unused words available")
-                
-                if !unusedWords.isEmpty {
-                    let randomWord = unusedWords.randomElement()!
-                    self.usedWords[category, default: []].insert(randomWord)
-                    print("🎯 Selected word: '\(randomWord)' from unused words")
-                    continuation.resume(returning: randomWord)
-                } else {
-                    print("⚠️ No unused words left in category '\(category)' - resetting used words")
-                    // Reset used words for this category and try again
-                    self.usedWords[category] = []
-                    if let randomWord = words.randomElement() {
-                        self.usedWords[category] = [randomWord]
-                        print("🔄 Reset used words and selected: '\(randomWord)'")
-                        continuation.resume(returning: randomWord)
-                    } else {
-                        continuation.resume(throwing: NSError(domain: "com.whatthephrase", code: 3, userInfo: [NSLocalizedDescriptionKey: "Failed to select a word"]))
-                    }
-                }
-            }
+            usedWordsStore.getRandomWord(category: category, words: words, continuation: continuation)
         }
     }
 
     func resetUsedWords() {
-        queue.async(flags: .barrier) { [weak self] in
-            self?.usedWords.removeAll()
-        }
+        usedWordsStore.resetUsedWords()
     }
     
     func setKidsMode(_ enabled: Bool) {
