@@ -47,6 +47,14 @@ Upload only screenshots (no build)
 
 Build for local development
 
+### ios build_local
+
+```sh
+[bundle exec] fastlane ios build_local
+```
+
+Build locally without certificates (for testing compilation)
+
 ### ios generate_appicon
 
 ```sh

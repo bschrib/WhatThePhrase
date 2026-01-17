@@ -31,62 +31,89 @@ struct ContentView: View {
     
     var body: some View {
         NavigationStack {
-            ScrollView {
-                LazyVStack(spacing: 16) {
-                    ForEach(categories, id: \.self) { category in
+            VStack(spacing: 0) {
+                // Fixed Header with buttons and title
+                VStack(spacing: 0) {
+                    HStack {
                         Button(action: {
-                            selectedCategoryItem = CategorySelection(name: category)
-                            Analytics.logEvent("category_selected", parameters: ["category_name": category])
+                            showInfo = true
                         }) {
-                            HStack {
-                                Text(category)
-                                    .font(.title3)
-                                    .fontWeight(.semibold)
-                                    .foregroundColor(.primary)
-                                Spacer()
-                                Image(systemName: "chevron.right")
-                                    .font(.system(size: 14, weight: .semibold))
-                                    .foregroundColor(.secondary)
-                            }
-                            .padding(.horizontal, 20)
-                            .padding(.vertical, 16)
-                            .background {
-                                RoundedRectangle(cornerRadius: 16)
-                                    .fill(.ultraThinMaterial)
-                            }
+                            Image(systemName: "info.circle")
+                                .font(.system(size: 20, weight: .regular))
+                                .foregroundColor(.accentColor)
                         }
-                        .buttonStyle(.plain)
+                        
+                        Spacer()
+                        
+                        Text("Select Category")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                            .foregroundColor(.primary)
+                        
+                        Spacer()
+                        
+                        Button(action: {
+                            showSettings = true
+                        }) {
+                            Image(systemName: "gearshape")
+                                .font(.system(size: 20, weight: .regular))
+                                .foregroundColor(.accentColor)
+                        }
                     }
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 12)
+                    .background(.ultraThinMaterial)
+                    
+                    // Brand Title
+                    HStack(spacing: 4) {
+                        Text("What")
+                            .font(.system(size: 32, weight: .bold, design: .rounded))
+                            .foregroundColor(.blue)
+                        Text("The")
+                            .font(.system(size: 32, weight: .bold, design: .rounded))
+                            .foregroundColor(.purple)
+                        Text("Phrase")
+                            .font(.system(size: 32, weight: .bold, design: .rounded))
+                            .foregroundColor(.orange)
+                    }
+                    .padding(.vertical, 20)
+                    .padding(.horizontal, 20)
                 }
-                .padding(.horizontal, 20)
-                .padding(.top, 8)
-                .padding(.bottom, 32)
+                
+                // Scrollable Category List
+                ScrollView {
+                    LazyVStack(spacing: 16) {
+                        ForEach(categories, id: \.self) { category in
+                            Button(action: {
+                                selectedCategoryItem = CategorySelection(name: category)
+                                Analytics.logEvent("category_selected", parameters: ["category_name": category])
+                            }) {
+                                HStack {
+                                    Text(category)
+                                        .font(.title3)
+                                        .fontWeight(.semibold)
+                                        .foregroundColor(.primary)
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                        .font(.system(size: 14, weight: .semibold))
+                                        .foregroundColor(.secondary)
+                                }
+                                .padding(.horizontal, 20)
+                                .padding(.vertical, 16)
+                                .background {
+                                    RoundedRectangle(cornerRadius: 16)
+                                        .fill(.ultraThinMaterial)
+                                }
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.top, 8)
+                    .padding(.bottom, 32)
+                }
             }
             .background(Color(.systemGroupedBackground))
-            .navigationTitle("Select Category")
-            .toolbarTitleDisplayMode(.large)
-            .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
-            .toolbarBackgroundVisibility(.visible, for: .navigationBar)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: {
-                        showInfo = true
-                    }) {
-                        Image(systemName: "info.circle")
-                            .font(.system(size: 20, weight: .regular))
-                            .foregroundColor(.accentColor)
-                    }
-                }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        showSettings = true
-                    }) {
-                        Image(systemName: "gearshape")
-                            .font(.system(size: 20, weight: .regular))
-                            .foregroundColor(.accentColor)
-                    }
-                }
-            }
             .sheet(item: $selectedCategoryItem) { categoryItem in
                 GameView(showCategories: Binding(
                     get: { selectedCategoryItem != nil },
