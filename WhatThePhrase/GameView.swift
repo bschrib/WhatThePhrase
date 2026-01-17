@@ -180,11 +180,11 @@ public struct GameView: View {
 
     public var body: some View {
         VStack(spacing: 20) {
-            if isLoading {
-                ProgressView()
-                    .scaleEffect(1.5)
-                    .padding()
-            }
+            ProgressView()
+                .scaleEffect(1.5)
+                .padding()
+                .opacity(isLoading ? 1 : 0)
+                .frame(height: 50)
             Text(selectedCategory ?? "")
                 .font(.largeTitle)
                 .fontWeight(.bold)

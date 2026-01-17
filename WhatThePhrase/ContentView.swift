@@ -63,6 +63,7 @@ struct ContentView: View {
                 timerDuration: $timerDuration,
                 playAsTeams: $playAsTeams,
                 isKidsMode: $isKidsMode)
+                .presentationDetents([.large])
             }
             .sheet(isPresented: $showSettings) {
                 SettingsView(playAsTeams: $playAsTeams, 
