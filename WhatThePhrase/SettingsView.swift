@@ -19,7 +19,7 @@ struct SettingsView: View {
             Form {
                 Section(header: Text("Game Mode")) {
                     Toggle("Kids Mode", isOn: $isKidsMode)
-                        .onChange(of: isKidsMode) { newValue in
+                        .onChange(of: isKidsMode) { oldValue, newValue in
                             requestManager.isKidsMode = newValue
                             requestManager.resetUsedWords()
                         }
