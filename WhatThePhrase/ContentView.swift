@@ -7,7 +7,6 @@ struct ContentView: View {
     @AppStorage("playAsTeams") private var playAsTeams: Bool = true
     @AppStorage("timerDuration") private var timerDuration: Int = 60
     @AppStorage("isKidsMode") private var isKidsMode: Bool = false
-    @State private var showGameView: Bool = false
     @StateObject private var requestManager = RequestManager.shared
     
     private var categories: [String] {
@@ -32,7 +31,6 @@ struct ContentView: View {
                         ForEach(categories, id: \.self) { category in
                             Button(action: {
                                 selectedCategory = category
-                                showGameView = true
                                 Analytics.logEvent("category_selected", parameters: ["category_name": category])
                             }) {
                                 Text(category)
@@ -51,14 +49,15 @@ struct ContentView: View {
                     .padding(.horizontal)
                 }
             }
-            .sheet(isPresented: $showGameView) {
-                if let category = selectedCategory {
-                    GameView(showCategories: $showGameView,
-                            selectedCategory: .constant(category),
-                            timerDuration: $timerDuration,
-                            playAsTeams: $playAsTeams,
-                            isKidsMode: $isKidsMode)
-                }
+            .sheet(item: $selectedCategory) { category in
+                GameView(showCategories: Binding(
+                    get: { selectedCategory != nil },
+                    set: { if !$0 { selectedCategory = nil } }
+                ),
+                selectedCategory: .constant(category),
+                timerDuration: $timerDuration,
+                playAsTeams: $playAsTeams,
+                isKidsMode: $isKidsMode)
             }
             .sheet(isPresented: $showSettings) {
                 SettingsView(playAsTeams: $playAsTeams, 
@@ -95,4 +94,8 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
     }
+}
+
+extension String: Identifiable {
+    public var id: String { self }
 }

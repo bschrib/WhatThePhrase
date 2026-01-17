@@ -17,6 +17,7 @@ public struct GameView: View {
     @State private var team2Score: Int = 0
     @State private var hasGameStarted: Bool = false
     @State private var isLoading: Bool = false
+    @State private var isUpdatingWord: Bool = false
     @StateObject private var audioPlayerController = AudioPlayerController()
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @StateObject private var requestManager = RequestManager.shared
@@ -130,11 +131,24 @@ public struct GameView: View {
     
     @MainActor
     private func asyncUpdateWord(category: String) async {
+        // Prevent concurrent word loading
+        guard !isUpdatingWord else {
+            print("⚠️ Word update already in progress, skipping")
+            return
+        }
+        
         await MainActor.run {
+            self.isUpdatingWord = true
             self.isLoading = true
             // Only clear the word if we already have a word loaded
             if hasLoadedInitialWord {
                 self.currentWord = ""
+            }
+        }
+        
+        defer {
+            Task { @MainActor in
+                self.isUpdatingWord = false
             }
         }
         
@@ -175,14 +189,6 @@ public struct GameView: View {
             Text(selectedCategory ?? "")
                 .font(.largeTitle)
                 .fontWeight(.bold)
-                .onAppear {
-                    // Initialize the first word when the view appears
-                    Task {
-                        if currentWord.isEmpty {
-                            try? await asyncUpdateWord(category: selectedCategory ?? "")
-                        }
-                    }
-                }
 
             ZStack {
                 Text("placeholder")
