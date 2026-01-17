@@ -1,0 +1,35 @@
+{
+    "animal": [
+        "ant", "bear", "bee", "bird", "bunny", "butterfly", "cat", "chick", "chicken", "cow",
+        "deer", "dog", "dolphin", "duck", "eagle", "elephant", "fish", "flamingo", "fox", "frog",
+        "giraffe", "goat", "goose", "hamster", "hen", "horse", "kitten", "koala", "ladybug", "lamb",
+        "lion", "monkey", "mouse", "owl", "panda", "parrot", "penguin", "pig", "puppy", "rabbit",
+        "rooster", "seal", "sheep", "snake", "squirrel", "swan", "tiger", "turtle", "whale", "zebra"
+    ],
+    "food": [
+        "apple", "banana", "berry", "bread", "cake", "candy", "carrot", "cereal", "cheese", "cherry",
+        "chicken", "chips", "chocolate", "cookie", "corn", "cracker", "cream", "cupcake", "donut", "egg",
+        "fish", "fruit", "grape", "ham", "honey", "ice cream", "juice", "lemon", "lollipop", "milk",
+        "muffin", "orange", "pancake", "peach", "pear", "pie", "pizza", "popcorn", "pretzel", "rice",
+        "sandwich", "soup", "strawberry", "sugar", "toast", "tomato", "water", "watermelon", "yogurt"
+    ],
+    "toy": [
+        "ball", "balloon", "bike", "block", "book", "bubble", "car", "card", "crayon", "dice",
+        "doll", "drum", "game", "kite", "lego", "marble", "paint", "puzzle", "puppet", "robot",
+        "rocket", "rattle", "slide", "soccer ball", "swing", "teddy bear", "top", "train", "truck", "yo-yo"
+    ],
+    "home": [
+        "bed", "blanket", "book", "bottle", "bowl", "box", "brush", "bucket", "cabinet", "chair",
+        "clock", "couch", "cup", "curtain", "desk", "door", "drawer", "fork", "frame", "glass",
+        "lamp", "light", "mirror", "mug", "pan", "pillow", "plate", "pot", "rug", "shelf",
+        "sink", "soap", "sofa", "spoon", "table", "towel", "toy", "vase", "window"
+    ],
+    "nature": [
+        "acorn", "ant", "bee", "bird", "branch", "breeze", "bud", "bush", "butterfly", "cloud",
+        "daisy", "dew", "dirt", "earth", "feather", "fern", "firefly", "flower", "forest", "frog",
+        "grass", "hill", "insect", "lake", "leaf", "lily", "moon", "moss", "mountain", "nest",
+        "ocean", "puddle", "rain", "rainbow", "river", "rock", "root", "rose", "seed", "shell",
+        "sky", "snow", "spider", "star", "stone", "stream", "sun", "sunshine", "tree", "twig",
+        "water", "wave", "wind", "wood"
+    ]
+}

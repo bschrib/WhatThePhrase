@@ -35,6 +35,8 @@
 		40E86A3A29EB9D4B0039AF43 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E86A3929EB9D4B0039AF43 /* GameView.swift */; };
 		40A46E0529EC562600081BFF /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40A46E0429EC562600081BFF /* InfoView.swift */; };
 		F51D6BD52DEFB024007C767C /* kids_wordlists.json in Resources */ = {isa = PBXBuildFile; fileRef = F51D6BD42DEFB024007C767C /* kids_wordlists.json */; };
+		4080BA0529EE041200CC7642 /* wordbank.json in Resources */ = {isa = PBXBuildFile; fileRef = 4080BA0729EE041200CC7642 /* wordbank.json */; };
+		F51D6BD82DEFB026007C767C /* kids_wordbank.json in Resources */ = {isa = PBXBuildFile; fileRef = F51D6BD72DEFB026007C767C /* kids_wordbank.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +76,8 @@
 		40E86A3929EB9D4B0039AF43 /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
 		40A46E0429EC562600081BFF /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
 		F51D6BD42DEFB024007C767C /* kids_wordlists.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = kids_wordlists.json; sourceTree = "<group>"; };
+		4080BA0729EE041200CC7642 /* wordbank.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = wordbank.json; sourceTree = "<group>"; };
+		F51D6BD72DEFB026007C767C /* kids_wordbank.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = kids_wordbank.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -169,6 +173,8 @@
 			children = (
 				F51D6BD42DEFB024007C767C /* kids_wordlists.json */,
 				4080BA0129EE041000CC7642 /* wordlists.json */,
+				4080BA0729EE041200CC7642 /* wordbank.json */,
+				F51D6BD72DEFB026007C767C /* kids_wordbank.json */,
 			);
 			path = WordLists;
 			sourceTree = "<group>";
@@ -312,6 +318,8 @@
 				4080BA0229EE041000CC7642 /* wordlists.json in Resources */,
 				405B0C2729EB95AC0001F479 /* Assets.xcassets in Resources */,
 				F51D6BD52DEFB024007C767C /* kids_wordlists.json in Resources */,
+				4080BA0529EE041200CC7642 /* wordbank.json in Resources */,
+				F51D6BD82DEFB026007C767C /* kids_wordbank.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -560,7 +568,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.roguedeveloper.WhatThePhrase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -598,7 +606,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.roguedeveloper.WhatThePhrase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

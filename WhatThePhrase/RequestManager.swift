@@ -52,6 +52,10 @@ final class RequestManager: ObservableObject {
     private let usedWordsStore = UsedWordsStore()
     @Published var isKidsMode: Bool = false
     
+    // Cache for merged wordlists to avoid reloading on every request
+    private var cachedWordlists: [String: [String]]? = nil
+    private var cachedMode: Bool? = nil
+    
     private init() {}
     
     private let kidsCategories: [String] = [
@@ -76,11 +80,112 @@ final class RequestManager: ObservableObject {
         "Games & Contests"
     ]
     
+    // Category to tag mapping for dynamic word generation
+    private let categoryTagMap: [String: [String]] = [
+        "Places & Spaces": ["place"],
+        "Travel & Transit": ["vehicle"],
+        "Household Items": ["furniture", "home"],
+        "Cuisine & Beverages": ["food"],
+        "Life On Earth": ["animal"],
+        "Relatives & Relations": ["family"],
+        "Gadgets & Innovations": ["invention"],
+        "Past Chronicles": ["history"],
+        "Pop Culture": ["entertainment"],
+        "Games & Contests": ["sport"]
+    ]
+    
+    // Kids category to tag mapping
+    private let kidsCategoryTagMap: [String: [String]] = [
+        "Animals": ["animal"],
+        "Food": ["food"],
+        "Toys & Games": ["toy"],
+        "Home": ["home"],
+        "Nature": ["nature"]
+    ]
+    
     var categories: [String] {
         return isKidsMode ? kidsCategories : regularCategories
     }
     
+    /// Loads word bank JSON (tag-based word collection)
+    private func loadWordBank() -> [String: [String]]? {
+        let filename = isKidsMode ? "kids_wordbank" : "wordbank"
+        
+        guard let url = Bundle.main.url(forResource: filename, withExtension: "json") else {
+            print("⚠️ Could not find \(filename).json in main bundle - word bank not available")
+            return nil
+        }
+        
+        do {
+            let data = try Data(contentsOf: url)
+            let wordBank = try JSONDecoder().decode([String: [String]].self, from: data)
+            print("✅ Loaded word bank with \(wordBank.count) tags")
+            return wordBank
+        } catch {
+            print("⚠️ Error loading \(filename).json: \(error.localizedDescription)")
+            return nil
+        }
+    }
+    
+    /// Merges base wordlists with tag-based word bank words
+    private func mergeWordlistsWithBank(baseWordlists: [String: [String]], wordBank: [String: [String]]?) -> [String: [String]] {
+        guard let wordBank = wordBank else {
+            return baseWordlists
+        }
+        
+        let tagMap = isKidsMode ? kidsCategoryTagMap : categoryTagMap
+        var mergedWordlists = baseWordlists
+        
+        // First pass: merge tags for all categories except Random
+        for (category, words) in baseWordlists {
+            // Skip Random category - will handle separately
+            if category == "Random" {
+                continue
+            }
+            
+            var mergedWords = Set(words) // Start with base words, use Set to dedupe
+            
+            // Get tags for this category
+            if let tags = tagMap[category] {
+                for tag in tags {
+                    if let tagWords = wordBank[tag] {
+                        mergedWords.formUnion(tagWords)
+                    }
+                }
+            }
+            
+            mergedWordlists[category] = Array(mergedWords).sorted()
+        }
+        
+        // Second pass: Build Random category from all other categories
+        if let randomBaseWords = baseWordlists["Random"] {
+            var randomWords = Set(randomBaseWords) // Start with Random's base words
+            
+            // Aggregate words from all other categories
+            for (category, words) in mergedWordlists {
+                if category != "Random" {
+                    randomWords.formUnion(words)
+                }
+            }
+            
+            // Also include all words from all tags in the word bank
+            for (_, tagWords) in wordBank {
+                randomWords.formUnion(tagWords)
+            }
+            
+            mergedWordlists["Random"] = Array(randomWords).sorted()
+        }
+        
+        return mergedWordlists
+    }
+    
     func loadLocalWordlists() -> [String: [String]] {
+        // Check cache first
+        if let cached = cachedWordlists, cachedMode == isKidsMode {
+            print("📦 Using cached wordlists")
+            return cached
+        }
+        
         let filename = isKidsMode ? "kids_wordlists" : "wordlists"
         print("\n📂 Loading wordlist: \(filename)")
         
@@ -103,36 +208,55 @@ final class RequestManager: ObservableObject {
         guard let url = Bundle.main.url(forResource: filename, withExtension: "json") else {
             print("⚠️ Could not find \(filename).json in main bundle - using fallback word lists")
             print("📝 Fallback categories: \(fallbackWordlists.keys.sorted())")
+            cachedWordlists = fallbackWordlists
+            cachedMode = isKidsMode
             return fallbackWordlists
         }
         
         do {
             print("📄 Found \(filename).json at: \(url.path)")
             let data = try Data(contentsOf: url)
-            let wordlists = try JSONDecoder().decode([String: [String]].self, from: data)
+            let baseWordlists = try JSONDecoder().decode([String: [String]].self, from: data)
             
             // Validate that we have categories and words
-            if wordlists.isEmpty {
+            if baseWordlists.isEmpty {
                 print("⚠️ Loaded empty wordlist from \(filename).json - using fallback")
+                cachedWordlists = fallbackWordlists
+                cachedMode = isKidsMode
                 return fallbackWordlists
             }
             
+            // Load word bank and merge
+            let wordBank = loadWordBank()
+            let mergedWordlists = mergeWordlistsWithBank(baseWordlists: baseWordlists, wordBank: wordBank)
+            
             // Log each category and word count
-            print("📊 Loaded categories and word counts:")
-            for (category, words) in wordlists.sorted(by: { $0.key < $1.key }) {
-                print("   - \(category): \(words.count) words")
+            print("📊 Loaded categories and word counts (after merge):")
+            for (category, words) in mergedWordlists.sorted(by: { $0.key < $1.key }) {
+                let baseCount = baseWordlists[category]?.count ?? 0
+                let addedCount = words.count - baseCount
+                print("   - \(category): \(words.count) words (\(baseCount) base + \(addedCount) from word bank))")
                 if words.isEmpty {
                     print("⚠️ Category '\(category)' has no words - using fallback")
+                    cachedWordlists = fallbackWordlists
+                    cachedMode = isKidsMode
                     return fallbackWordlists
                 }
             }
             
-            print("✅ Successfully loaded \(wordlists.count) categories from \(filename).json")
-            return wordlists
+            print("✅ Successfully loaded \(mergedWordlists.count) categories (merged with word bank)")
+            
+            // Cache the result
+            cachedWordlists = mergedWordlists
+            cachedMode = isKidsMode
+            
+            return mergedWordlists
             
         } catch {
             print("⚠️ Error loading \(filename).json: \(error.localizedDescription)")
             print("📝 Using fallback word lists with categories: \(fallbackWordlists.keys.sorted())")
+            cachedWordlists = fallbackWordlists
+            cachedMode = isKidsMode
             return fallbackWordlists
         }
     }
@@ -173,6 +297,9 @@ final class RequestManager: ObservableObject {
     func setKidsMode(_ enabled: Bool) {
         isKidsMode = enabled
         resetUsedWords()
+        // Clear cache when mode changes so new wordlists are loaded
+        cachedWordlists = nil
+        cachedMode = nil
     }
     
     func preloadWordlists() {

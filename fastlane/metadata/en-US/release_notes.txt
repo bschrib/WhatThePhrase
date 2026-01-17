@@ -1,3 +1,4 @@
-- New "How to Play" info screen - tap the info icon to learn the rules and game modes
-- Kids Mode with age-appropriate word categories for younger players
+- Expanded word pools with dynamic word bank system for more variety in all categories
+- Enhanced Kids Mode with larger word selection for age-appropriate gameplay
+- Improved word selection algorithm for better game replayability
 - Bug fixes and performance improvements
