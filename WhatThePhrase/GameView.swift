@@ -107,24 +107,30 @@ public struct GameView: View {
             teamAction()
         }) {
             Text(teamName)
-                .font(.system(size: 24))
-                .padding()
-                .background(teamColor)
+                .font(.title3)
+                .fontWeight(.semibold)
                 .foregroundColor(.white)
-                .cornerRadius(10)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 16)
+                .background {
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(teamColor.gradient)
+                }
         }
+        .buttonStyle(.plain)
     }
 
     private func teamScoreView(teamColor: Color, score: Binding<Int>) -> some View {
-        ZStack {
-            Circle()
-                .fill(teamColor)
-                .frame(width: 50, height: 50)
-            
-            Text("\(score.wrappedValue)")
-                .font(.system(size: 24))
-                .fontWeight(.bold)
-                .foregroundColor(.white)
+        VStack(spacing: 4) {
+            ZStack {
+                Circle()
+                    .fill(teamColor.gradient)
+                    .frame(width: 64, height: 64)
+                
+                Text("\(score.wrappedValue)")
+                    .font(.system(size: 28, weight: .bold))
+                    .foregroundColor(.white)
+            }
         }
     }
     
@@ -179,130 +185,186 @@ public struct GameView: View {
     }
 
     public var body: some View {
-        VStack(spacing: 20) {
-            ProgressView()
-                .scaleEffect(1.5)
-                .padding()
-                .opacity(isLoading ? 1 : 0)
-                .frame(height: 50)
-            Text(selectedCategory ?? "")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-
-            ZStack {
-                let displayWord = isGameRunning
-                    ? (currentWord.isEmpty ? "TAP TO START" : currentWord)
-                    : "TAP TO START"
-                Text(displayWord)
-                    .font(.system(size:24))
-            }
-            .padding(.bottom, 5)
-
-
-            Text(timeRemainingFormatted)
-                .font(.system(size: 24))
-                .padding(.bottom, 10)
-
-            Button(action: {
-                if isGameRunning {
-                    stopGame()
-                } else {
-                    startGame()
+        ScrollView {
+            VStack(spacing: 24) {
+                // Category Header Card
+                VStack(spacing: 8) {
+                    Text(selectedCategory ?? "")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .foregroundColor(.primary)
+                    
+                    Text(timeRemainingFormatted)
+                        .font(.system(size: 32, weight: .bold, design: .rounded))
+                        .foregroundColor(.accentColor)
+                        .monospacedDigit()
                 }
-            }) {
-                Text(isGameRunning ? "Stop" : "Start")
-                    .font(.system(size: 24))
-                    .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 20)
+                .background {
+                    RoundedRectangle(cornerRadius: 20)
+                        .fill(.ultraThinMaterial)
+                }
+                
+                // Word Display Card
+                VStack(spacing: 12) {
+                    if isLoading {
+                        ProgressView()
+                            .scaleEffect(1.2)
+                            .padding(.vertical, 20)
+                    } else {
+                        let displayWord = isGameRunning
+                            ? (currentWord.isEmpty ? "TAP TO START" : currentWord)
+                            : "TAP TO START"
+                        Text(displayWord)
+                            .font(.system(size: 32, weight: .bold, design: .rounded))
+                            .foregroundColor(.primary)
+                            .multilineTextAlignment(.center)
+                            .lineLimit(3)
+                            .minimumScaleFactor(0.7)
+                            .padding(.vertical, 24)
+                    }
+                }
+                .frame(maxWidth: .infinity, minHeight: 120)
+                .background {
+                    RoundedRectangle(cornerRadius: 20)
+                        .fill(.regularMaterial)
+                }
+                
+                // Control Buttons Card
+                VStack(spacing: 16) {
+                    // Start/Stop Button
+                    Button(action: {
+                        if isGameRunning {
+                            stopGame()
+                        } else {
+                            startGame()
+                        }
+                    }) {
+                        Text(isGameRunning ? "Stop" : "Start")
+                            .font(.title3)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 16)
+                            .background {
+                                RoundedRectangle(cornerRadius: 16)
+                                    .fill(isGameRunning ? Color.red.gradient : Color.accentColor.gradient)
+                            }
+                    }
+                    .buttonStyle(.plain)
+                    
+                    // Team/Correct Buttons
+                    if playAsTeams {
+                        HStack(spacing: 12) {
+                            teamButton(teamName: "Team 1", teamColor: Color.red, teamAction: {
+                                Task {
+                                    await addPointToTeam1()
+                                }
+                            })
+                            
+                            teamButton(teamName: "Team 2", teamColor: Color.green, teamAction: {
+                                Task {
+                                    await addPointToTeam2()
+                                }
+                            })
+                        }
+                    } else {
+                        Button(action: {
+                            Task {
+                                await addPointToTeam1()
+                            }
+                        }) {
+                            Text("Correct")
+                                .font(.title3)
+                                .fontWeight(.semibold)
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 16)
+                                .background {
+                                    RoundedRectangle(cornerRadius: 16)
+                                        .fill(Color.accentColor.gradient)
+                                }
+                        }
+                        .buttonStyle(.plain)
+                    }
+                    
+                    // Pass Button
+                    Button(action: {
+                        Task {
+                            await pass()
+                        }
+                    }) {
+                        Text("Pass")
+                            .font(.title3)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 16)
+                            .background {
+                                RoundedRectangle(cornerRadius: 16)
+                                    .fill(Color.orange.gradient)
+                            }
+                    }
+                    .buttonStyle(.plain)
+                }
+                .padding(20)
+                .background {
+                    RoundedRectangle(cornerRadius: 20)
+                        .fill(.ultraThinMaterial)
+                }
+                
+                // Score Display Card
+                HStack(spacing: 40) {
+                    if playAsTeams {
+                        teamScoreView(teamColor: Color.red, score: $team1Score)
+                        teamScoreView(teamColor: Color.green, score: $team2Score)
+                    } else {
+                        teamScoreView(teamColor: Color.accentColor, score: $team1Score)
+                    }
+                }
+                .padding(.vertical, 20)
+                .frame(maxWidth: .infinity)
+                .background {
+                    RoundedRectangle(cornerRadius: 20)
+                        .fill(.ultraThinMaterial)
+                }
+                
+                // Back Button
+                Button(action: {
+                    presentationMode.wrappedValue.dismiss()
+                }) {
+                    Text("Go Back To Categories")
+                        .font(.body)
+                        .fontWeight(.medium)
+                        .foregroundColor(.secondary)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 12)
+                }
+                .buttonStyle(.plain)
             }
-            .contentShape(Rectangle())
-
+            .padding(.horizontal, 20)
+            .padding(.top, 8)
+            .padding(.bottom, 32)
+        }
+        .background(Color(.systemGroupedBackground))
+        .alert(isPresented: $showAlert) {
+            let message: String
             if playAsTeams {
-                HStack {
-                    teamButton(teamName: "Team 1", teamColor: Color.red, teamAction: {
-                        Task {
-                            await addPointToTeam1()
-                        }
-                    })
-
-                    teamButton(teamName: "Team 2", teamColor: Color.green, teamAction: {
-                        Task {
-                            await addPointToTeam2()
-                        }
-                    })
+                if team1Score > team2Score {
+                    message = "Team 1 won!"
+                } else if team1Score < team2Score {
+                    message = "Team 2 won!"
+                } else {
+                    message = "It's a tie!"
                 }
             } else {
-                Button(action: {
-                    Task {
-                        await addPointToTeam1()
-                    }
-                }) {
-                    Text("Correct")
-                        .font(.system(size: 24))
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                }
+                message = "You scored \(team1Score) points!"
             }
-
-            Button(action: {
-                Task {
-                    await pass()
-                }
-            }) {
-                Text("Pass")
-                    .font(.system(size: 24))
-                    .padding()
-                    .background(Color.orange)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
-            }
-            .padding(.top, 10)
-
-            HStack(spacing: 30) {
-                            if playAsTeams {
-                                teamScoreView(teamColor: Color.red, score: $team1Score)
-                                teamScoreView(teamColor: Color.green, score: $team2Score)
-                            } else {
-                                teamScoreView(teamColor: Color.blue, score: $team1Score)
-                            }
-                        }
-                        .padding(.top, 20)
-                        .alert(isPresented: $showAlert) {
-                            let message: String
-                            if playAsTeams {
-                                if team1Score > team2Score {
-                                    message = "Team 1 won!"
-                                } else if team1Score < team2Score {
-                                    message = "Team 2 won!"
-                                } else {
-                                    message = "It's a tie!"
-                                }
-                            } else {
-                                message = "You scored \(team1Score) points!"
-                            }
-                            return Alert(title: Text("Time's Up!"),
-                                         message: Text(message),
-                                         dismissButton: .default(Text("OK")))
-                        }
-
-
-            Button(action: {
-                presentationMode.wrappedValue.dismiss()
-            }) {
-                Text("Go Back To Categories")
-                    .font(.system(size: 18))
-                    .padding()
-                    .background(Color.gray)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
-            }
-            .padding(.top, 10)
+            return Alert(title: Text("Time's Up!"),
+                         message: Text(message),
+                         dismissButton: .default(Text("OK")))
         }
-        .padding()
         .onAppear {
             timeRemaining = timerDuration
             // Don't load words here - wait for game to start

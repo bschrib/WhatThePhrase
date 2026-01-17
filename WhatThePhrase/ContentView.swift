@@ -30,29 +30,61 @@ struct ContentView: View {
     }
     
     var body: some View {
-        NavigationView {
-            VStack {
-                ScrollView {
-                    LazyVStack(spacing: 10) {
-                        ForEach(categories, id: \.self) { category in
-                            Button(action: {
-                                selectedCategoryItem = CategorySelection(name: category)
-                                Analytics.logEvent("category_selected", parameters: ["category_name": category])
-                            }) {
+        NavigationStack {
+            ScrollView {
+                LazyVStack(spacing: 16) {
+                    ForEach(categories, id: \.self) { category in
+                        Button(action: {
+                            selectedCategoryItem = CategorySelection(name: category)
+                            Analytics.logEvent("category_selected", parameters: ["category_name": category])
+                        }) {
+                            HStack {
                                 Text(category)
-                                    .font(.title2)
-                                    .fontWeight(.bold)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding()
-                                    .background(Color.blue)
-                                    .foregroundColor(.white)
-                                    .cornerRadius(10)
+                                    .font(.title3)
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.primary)
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .font(.system(size: 14, weight: .semibold))
+                                    .foregroundColor(.secondary)
                             }
-                            .listRowInsets(EdgeInsets())
-                            .buttonStyle(PlainButtonStyle())
+                            .padding(.horizontal, 20)
+                            .padding(.vertical, 16)
+                            .background {
+                                RoundedRectangle(cornerRadius: 16)
+                                    .fill(.ultraThinMaterial)
+                            }
                         }
+                        .buttonStyle(.plain)
                     }
-                    .padding(.horizontal)
+                }
+                .padding(.horizontal, 20)
+                .padding(.top, 8)
+                .padding(.bottom, 32)
+            }
+            .background(Color(.systemGroupedBackground))
+            .navigationTitle("Select Category")
+            .toolbarTitleDisplayMode(.large)
+            .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+            .toolbarBackgroundVisibility(.visible, for: .navigationBar)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: {
+                        showInfo = true
+                    }) {
+                        Image(systemName: "info.circle")
+                            .font(.system(size: 20, weight: .regular))
+                            .foregroundColor(.accentColor)
+                    }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        showSettings = true
+                    }) {
+                        Image(systemName: "gearshape")
+                            .font(.system(size: 20, weight: .regular))
+                            .foregroundColor(.accentColor)
+                    }
                 }
             }
             .sheet(item: $selectedCategoryItem) { categoryItem in
@@ -74,23 +106,6 @@ struct ContentView: View {
             .sheet(isPresented: $showInfo) {
                 InfoView()
             }
-            .navigationTitle("Select Category")
-            .navigationBarItems(
-                leading:
-                    Button(action: {
-                        showInfo = true
-                    }) {
-                        Image(systemName: "info.circle")
-                            .font(.title)
-                    },
-                trailing:
-                    Button(action: {
-                        showSettings = true
-                    }) {
-                        Image(systemName: "gearshape")
-                            .font(.title)
-                    }
-            )
         }
         .onAppear {
             // Ensure wordlists are loaded when view appears

@@ -65,6 +65,18 @@ platform :ios do
     )
   end
 
+  desc "Build locally without certificates (for testing compilation)"
+  lane :build_local do
+    build_app(
+      project: "WhatThePhrase.xcodeproj",
+      scheme: "WhatThePhrase",
+      configuration: "Debug",
+      sdk: "iphonesimulator",
+      skip_codesigning: true,
+      skip_package_ipa: true
+    )
+  end
+
   lane :generate_appicon do
     appicon(
       appicon_image_file: 'WhatThePhrase/Assets/Images/AppIcon.png',

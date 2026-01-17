@@ -1,4 +1,5 @@
-- Expanded word pools with dynamic word bank system for more variety in all categories
-- Enhanced Kids Mode with larger word selection for age-appropriate gameplay
-- Improved word selection algorithm for better game replayability
-- Bug fixes and performance improvements
+- Complete UI redesign with modern iOS 26 appearance
+- Beautiful card-based layouts with glass materials and smooth animations
+- Enhanced visual hierarchy and improved readability across all screens
+- Modernized category selection, game screen, settings, and help screens
+- Improved user experience with updated typography and spacing
