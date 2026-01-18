@@ -91,8 +91,8 @@ struct InfoView: View {
                 .padding(.bottom, 32)
             }
             .background(Color(.systemGroupedBackground))
-            .navigationTitle("How to Play")
-            .toolbarTitleDisplayMode(.large)
+            .navigationTitle("How To Play")
+            .toolbarTitleDisplayMode(.inline)
             .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
             .toolbarBackgroundVisibility(.visible, for: .navigationBar)
             .toolbar {
