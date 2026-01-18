@@ -1,7 +1,6 @@
 # A list of devices you want to take the screenshots from
 devices([
-  "iPhone 17 Pro",
-  "iPhone 17 Pro Max"
+  "iPhone 17 Pro"
 ])
 
 # A list of languages you want to take the screenshots from
