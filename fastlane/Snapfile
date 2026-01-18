@@ -1,7 +1,6 @@
 # A list of devices you want to take the screenshots from
 devices([
-  "iPhone 17 Pro",
-  "iPhone 17 Pro Max"
+  "iPhone 17 Pro"
 ])
 
 # A list of languages you want to take the screenshots from
@@ -16,7 +15,7 @@ scheme("WhatThePhraseScreenShots")
 testplan("WhatThePhraseScreenShots")
 
 # Where should the screenshots be stored?
-output_directory("./screenshots")
+output_directory("screenshots")
 
 # Clear all previously generated screenshots before creating new ones
 clear_previous_screenshots(true)

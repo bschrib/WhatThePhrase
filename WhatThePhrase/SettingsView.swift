@@ -126,8 +126,8 @@ struct SettingsView: View {
                 .padding(.bottom, 32)
             }
             .background(Color(.systemGroupedBackground))
-            .navigationTitle("Settings")
-            .toolbarTitleDisplayMode(.large)
+            .navigationTitle("Options")
+            .toolbarTitleDisplayMode(.inline)
             .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
             .toolbarBackgroundVisibility(.visible, for: .navigationBar)
             .toolbar {
