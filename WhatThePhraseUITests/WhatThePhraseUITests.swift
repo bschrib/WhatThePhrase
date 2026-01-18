@@ -6,6 +6,10 @@ final class WhatThePhraseUITests: XCTestCase {
     func testTakeScreenshots() async throws {
         await setupSnapshot(app)
 
+        // Force light mode for screenshots
+        app.launchArguments.append("-UIUserInterfaceStyle")
+        app.launchArguments.append("Light")
+        
         app.launch()
         
         // Wait for app to launch and initial view to appear
