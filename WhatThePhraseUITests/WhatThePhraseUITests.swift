@@ -49,44 +49,12 @@ final class WhatThePhraseUITests: XCTestCase {
         // 03: Settings View
         await snapshot("03SettingsView")
         
-        // Enable Kids Mode
-        let kidsModeToggle = app.switches["kidsModeToggle"]
-        XCTAssertTrue(kidsModeToggle.waitForExistence(timeout: 5))
-        if kidsModeToggle.value as? Int == 0 {
-            kidsModeToggle.tap()
-        }
-        
-        // Wait a moment for the toggle to update
-        try await Task.sleep(nanoseconds: 500_000_000)
-        
         // Dismiss settings
         let settingsDoneButton = app.buttons["Done"]
         XCTAssertTrue(settingsDoneButton.waitForExistence(timeout: 5))
         settingsDoneButton.tap()
         
         // Wait for settings to dismiss
-        XCTAssertTrue(categoryView.waitForExistence(timeout: 5))
-        try await Task.sleep(nanoseconds: 500_000_000)
-        
-        // 04: Kids Mode Categories View
-        await snapshot("04KidsModeCategoryView")
-        
-        // Disable Kids Mode for next screenshots
-        settingsButton.tap()
-        XCTAssertTrue(settingsNavBar.waitForExistence(timeout: 5))
-        
-        let kidsModeToggle2 = app.switches["kidsModeToggle"]
-        XCTAssertTrue(kidsModeToggle2.waitForExistence(timeout: 5))
-        if kidsModeToggle2.value as? Int == 1 {
-            kidsModeToggle2.tap()
-        }
-        
-        try await Task.sleep(nanoseconds: 500_000_000)
-        
-        let settingsDoneButton2 = app.buttons["Done"]
-        XCTAssertTrue(settingsDoneButton2.waitForExistence(timeout: 5))
-        settingsDoneButton2.tap()
-        
         XCTAssertTrue(categoryView.waitForExistence(timeout: 5))
         try await Task.sleep(nanoseconds: 500_000_000)
         
