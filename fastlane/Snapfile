@@ -1,0 +1,22 @@
+# A list of devices you want to take the screenshots from
+devices([
+  "iPhone 17 Pro",
+  "iPhone 17 Pro Max"
+])
+
+# A list of languages you want to take the screenshots from
+languages([
+  "en-US"
+])
+
+# The name of the scheme which contains the UI Tests
+scheme("WhatThePhraseScreenShots")
+
+# The name of the test plan to use (if using Xcode test plans)
+testplan("WhatThePhraseScreenShots")
+
+# Where should the screenshots be stored?
+output_directory("./screenshots")
+
+# Clear all previously generated screenshots before creating new ones
+clear_previous_screenshots(true)

@@ -44,6 +44,15 @@ platform :ios do
     )
   end
 
+  desc "Generate screenshots using Snapshot"
+  lane :screenshots do
+    snapshot(
+      project: "WhatThePhrase.xcodeproj",
+      scheme: "WhatThePhraseScreenShots",
+      testplan: "WhatThePhraseScreenShots"
+    )
+  end
+
   desc "Upload only screenshots (no build)"
   lane :upload_screenshots do
     upload_to_app_store(

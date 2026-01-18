@@ -38,6 +38,7 @@ struct SettingsView: View {
                                 Spacer()
                                 Toggle("", isOn: $isKidsMode)
                                     .labelsHidden()
+                                    .accessibilityIdentifier("kidsModeToggle")
                             }
                             .padding(.horizontal, 20)
                             .padding(.vertical, 16)
@@ -58,6 +59,7 @@ struct SettingsView: View {
                                 Spacer()
                                 Toggle("", isOn: $playAsTeams)
                                     .labelsHidden()
+                                    .accessibilityIdentifier("playAsTeamsToggle")
                             }
                             .padding(.horizontal, 20)
                             .padding(.vertical, 16)

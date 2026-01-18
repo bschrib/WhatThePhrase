@@ -31,6 +31,14 @@ Push a new beta build to TestFlight
 
 Push a new build to the App Store (Public Release)
 
+### ios screenshots
+
+```sh
+[bundle exec] fastlane ios screenshots
+```
+
+Generate screenshots using Snapshot
+
 ### ios upload_screenshots
 
 ```sh

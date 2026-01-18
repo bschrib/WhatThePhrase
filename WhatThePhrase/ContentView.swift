@@ -42,6 +42,7 @@ struct ContentView: View {
                                 .font(.system(size: 20, weight: .regular))
                                 .foregroundColor(.accentColor)
                         }
+                        .accessibilityIdentifier("infoButton")
                         
                         Spacer()
                         
@@ -59,6 +60,7 @@ struct ContentView: View {
                                 .font(.system(size: 20, weight: .regular))
                                 .foregroundColor(.accentColor)
                         }
+                        .accessibilityIdentifier("settingsButton")
                     }
                     .padding(.horizontal, 20)
                     .padding(.vertical, 12)
