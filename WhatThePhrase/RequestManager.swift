@@ -56,7 +56,9 @@ final class RequestManager: ObservableObject {
     private var cachedWordlists: [String: [String]]? = nil
     private var cachedMode: Bool? = nil
     
-    private init() {}
+    private init() {
+        // Singleton: prevent external initialization.
+    }
     
     private let kidsCategories: [String] = [
         "Animals",

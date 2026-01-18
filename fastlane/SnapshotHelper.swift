@@ -168,10 +168,15 @@ open class Snapshot: NSObject {
             }
 
             let screenshot = XCUIScreen.main.screenshot()
+            let image: UIImage
             #if os(iOS) && !targetEnvironment(macCatalyst)
-            let image = XCUIDevice.shared.orientation.isLandscape ?  fixLandscapeOrientation(image: screenshot.image) : screenshot.image
+            if XCUIDevice.shared.orientation.isLandscape {
+                image = fixLandscapeOrientation(image: screenshot.image)
+            } else {
+                image = screenshot.image
+            }
             #else
-            let image = screenshot.image
+            image = screenshot.image
             #endif
 
             guard var simulator = ProcessInfo().environment["SIMULATOR_DEVICE_NAME"], let screenshotsDir = screenshotsDirectory else { return }

@@ -213,9 +213,15 @@ public struct GameView: View {
                             .scaleEffect(1.2)
                             .padding(.vertical, 20)
                     } else {
-                        let displayWord = isGameRunning
-                            ? (currentWord.isEmpty ? "TAP TO START" : currentWord)
-                            : "TAP TO START"
+                        let displayWord = {
+                            if !isGameRunning {
+                                return "TAP TO START"
+                            }
+                            if currentWord.isEmpty {
+                                return "TAP TO START"
+                            }
+                            return currentWord
+                        }()
                         Text(displayWord)
                             .font(.system(size: 32, weight: .bold, design: .rounded))
                             .foregroundColor(.primary)
