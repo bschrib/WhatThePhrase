@@ -30,31 +30,92 @@ struct ContentView: View {
     }
     
     var body: some View {
-        NavigationView {
-            VStack {
+        NavigationStack {
+            VStack(spacing: 0) {
+                // Fixed Header with buttons and title
+                VStack(spacing: 0) {
+                    HStack {
+                        Button(action: {
+                            showInfo = true
+                        }) {
+                            Image(systemName: "info.circle")
+                                .font(.system(size: 20, weight: .regular))
+                                .foregroundColor(.accentColor)
+                        }
+                        .accessibilityIdentifier("infoButton")
+                        
+                        Spacer()
+                        
+                        Text("Select Category")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                            .foregroundColor(.primary)
+                        
+                        Spacer()
+                        
+                        Button(action: {
+                            showSettings = true
+                        }) {
+                            Image(systemName: "gearshape")
+                                .font(.system(size: 20, weight: .regular))
+                                .foregroundColor(.accentColor)
+                        }
+                        .accessibilityIdentifier("settingsButton")
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 12)
+                    .background(.ultraThinMaterial)
+                    
+                    // Brand Title
+                    HStack(spacing: 4) {
+                        Text("What")
+                            .font(.system(size: 32, weight: .bold, design: .rounded))
+                            .foregroundColor(.blue)
+                        Text("The")
+                            .font(.system(size: 32, weight: .bold, design: .rounded))
+                            .foregroundColor(.purple)
+                        Text("Phrase")
+                            .font(.system(size: 32, weight: .bold, design: .rounded))
+                            .foregroundColor(.orange)
+                    }
+                    .padding(.vertical, 20)
+                    .padding(.horizontal, 20)
+                }
+                
+                // Scrollable Category List
                 ScrollView {
-                    LazyVStack(spacing: 10) {
+                    LazyVStack(spacing: 16) {
                         ForEach(categories, id: \.self) { category in
                             Button(action: {
                                 selectedCategoryItem = CategorySelection(name: category)
                                 Analytics.logEvent("category_selected", parameters: ["category_name": category])
                             }) {
-                                Text(category)
-                                    .font(.title2)
-                                    .fontWeight(.bold)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding()
-                                    .background(Color.blue)
-                                    .foregroundColor(.white)
-                                    .cornerRadius(10)
+                                HStack {
+                                    Text(category)
+                                        .font(.title3)
+                                        .fontWeight(.semibold)
+                                        .foregroundColor(.primary)
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                        .font(.system(size: 14, weight: .semibold))
+                                        .foregroundColor(.secondary)
+                                }
+                                .padding(.horizontal, 20)
+                                .padding(.vertical, 16)
+                                .background {
+                                    RoundedRectangle(cornerRadius: 16)
+                                        .fill(.ultraThinMaterial)
+                                }
                             }
-                            .listRowInsets(EdgeInsets())
-                            .buttonStyle(PlainButtonStyle())
+                            .buttonStyle(.plain)
                         }
                     }
-                    .padding(.horizontal)
+                    .padding(.horizontal, 20)
+                    .padding(.top, 8)
+                    .padding(.bottom, 32)
                 }
             }
+            .background(Color(.systemGroupedBackground))
             .sheet(item: $selectedCategoryItem) { categoryItem in
                 GameView(showCategories: Binding(
                     get: { selectedCategoryItem != nil },
@@ -74,23 +135,6 @@ struct ContentView: View {
             .sheet(isPresented: $showInfo) {
                 InfoView()
             }
-            .navigationTitle("Select Category")
-            .navigationBarItems(
-                leading:
-                    Button(action: {
-                        showInfo = true
-                    }) {
-                        Image(systemName: "info.circle")
-                            .font(.title)
-                    },
-                trailing:
-                    Button(action: {
-                        showSettings = true
-                    }) {
-                        Image(systemName: "gearshape")
-                            .font(.title)
-                    }
-            )
         }
         .onAppear {
             // Ensure wordlists are loaded when view appears

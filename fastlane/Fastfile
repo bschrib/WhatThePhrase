@@ -44,6 +44,15 @@ platform :ios do
     )
   end
 
+  desc "Generate screenshots using Snapshot"
+  lane :screenshots do
+    snapshot(
+      project: "WhatThePhrase.xcodeproj",
+      scheme: "WhatThePhraseScreenShots",
+      testplan: "WhatThePhraseScreenShots"
+    )
+  end
+
   desc "Upload only screenshots (no build)"
   lane :upload_screenshots do
     upload_to_app_store(
@@ -61,6 +70,18 @@ platform :ios do
       scheme: "WhatThePhrase",
       configuration: "Debug",
       export_method: "development",
+      skip_package_ipa: true
+    )
+  end
+
+  desc "Build locally without certificates (for testing compilation)"
+  lane :build_local do
+    build_app(
+      project: "WhatThePhrase.xcodeproj",
+      scheme: "WhatThePhrase",
+      configuration: "Debug",
+      sdk: "iphonesimulator",
+      skip_codesigning: true,
       skip_package_ipa: true
     )
   end

@@ -1,3 +1,5 @@
-- New "How to Play" info screen - tap the info icon to learn the rules and game modes
-- Kids Mode with age-appropriate word categories for younger players
-- Bug fixes and performance improvements
+- Complete UI redesign with modern iOS 26 appearance
+- Beautiful card-based layouts with glass materials and smooth animations
+- Enhanced visual hierarchy and improved readability across all screens
+- Modernized category selection, game screen, settings, and help screens
+- Improved user experience with updated typography and spacing

@@ -31,6 +31,14 @@ Push a new beta build to TestFlight
 
 Push a new build to the App Store (Public Release)
 
+### ios screenshots
+
+```sh
+[bundle exec] fastlane ios screenshots
+```
+
+Generate screenshots using Snapshot
+
 ### ios upload_screenshots
 
 ```sh
@@ -46,6 +54,14 @@ Upload only screenshots (no build)
 ```
 
 Build for local development
+
+### ios build_local
+
+```sh
+[bundle exec] fastlane ios build_local
+```
+
+Build locally without certificates (for testing compilation)
 
 ### ios generate_appicon
 
