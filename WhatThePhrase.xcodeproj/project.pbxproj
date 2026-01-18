@@ -22,8 +22,10 @@
 		40653A7F29F4B94D00CB96AB /* LaunchScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40653A7E29F4B94D00CB96AB /* LaunchScreen.swift */; };
 		40653A8129F4BD1100CB96AB /* LaunchScreenHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40653A8029F4BD1100CB96AB /* LaunchScreenHostingController.swift */; };
 		4080BA0229EE041000CC7642 /* wordlists.json in Resources */ = {isa = PBXBuildFile; fileRef = 4080BA0129EE041000CC7642 /* wordlists.json */; };
+		4080BA0529EE041200CC7642 /* wordbank.json in Resources */ = {isa = PBXBuildFile; fileRef = 4080BA0729EE041200CC7642 /* wordbank.json */; };
 		40A46DFD29EC4A2A00081BFF /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40A46DFC29EC4A2A00081BFF /* SettingsView.swift */; };
 		40A46E0329EC562500081BFF /* buzz.wav in Resources */ = {isa = PBXBuildFile; fileRef = 40A46E0229EC562500081BFF /* buzz.wav */; };
+		40A46E0529EC562600081BFF /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40A46E0429EC562600081BFF /* InfoView.swift */; };
 		40B33F922A09C8A800E10CC2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 40B33F912A09C8A800E10CC2 /* GoogleService-Info.plist */; };
 		40B33F932A09C8A800E10CC2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 40B33F912A09C8A800E10CC2 /* GoogleService-Info.plist */; };
 		40B33F962A09C95A00E10CC2 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 40B33F952A09C95A00E10CC2 /* FirebaseAnalytics */; };
@@ -33,9 +35,7 @@
 		40B33F9E2A09C95A00E10CC2 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 40B33F9D2A09C95A00E10CC2 /* FirebaseCrashlytics */; };
 		40B33FA02A09CA5D00E10CC2 /* FirebaseDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40B33F9F2A09CA5D00E10CC2 /* FirebaseDelegate.swift */; };
 		40E86A3A29EB9D4B0039AF43 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E86A3929EB9D4B0039AF43 /* GameView.swift */; };
-		40A46E0529EC562600081BFF /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40A46E0429EC562600081BFF /* InfoView.swift */; };
 		F51D6BD52DEFB024007C767C /* kids_wordlists.json in Resources */ = {isa = PBXBuildFile; fileRef = F51D6BD42DEFB024007C767C /* kids_wordlists.json */; };
-		4080BA0529EE041200CC7642 /* wordbank.json in Resources */ = {isa = PBXBuildFile; fileRef = 4080BA0729EE041200CC7642 /* wordbank.json */; };
 		F51D6BD82DEFB026007C767C /* kids_wordbank.json in Resources */ = {isa = PBXBuildFile; fileRef = F51D6BD72DEFB026007C767C /* kids_wordbank.json */; };
 /* End PBXBuildFile section */
 
@@ -69,14 +69,14 @@
 		40653A8029F4BD1100CB96AB /* LaunchScreenHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenHostingController.swift; sourceTree = "<group>"; };
 		4080BA0029EDFDFD00CC7642 /* generate_category_wordlists.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = generate_category_wordlists.py; sourceTree = "<group>"; };
 		4080BA0129EE041000CC7642 /* wordlists.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = wordlists.json; sourceTree = "<group>"; };
+		4080BA0729EE041200CC7642 /* wordbank.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = wordbank.json; sourceTree = "<group>"; };
 		40A46DFC29EC4A2A00081BFF /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		40A46E0229EC562500081BFF /* buzz.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = buzz.wav; sourceTree = "<group>"; };
+		40A46E0429EC562600081BFF /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
 		40B33F912A09C8A800E10CC2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		40B33F9F2A09CA5D00E10CC2 /* FirebaseDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseDelegate.swift; sourceTree = "<group>"; };
 		40E86A3929EB9D4B0039AF43 /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
-		40A46E0429EC562600081BFF /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
 		F51D6BD42DEFB024007C767C /* kids_wordlists.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = kids_wordlists.json; sourceTree = "<group>"; };
-		4080BA0729EE041200CC7642 /* wordbank.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = wordbank.json; sourceTree = "<group>"; };
 		F51D6BD72DEFB026007C767C /* kids_wordbank.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = kids_wordbank.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -263,7 +263,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1430;
-				LastUpgradeCheck = 1430;
+				LastUpgradeCheck = 2620;
 				TargetAttributes = {
 					40424EFA29F088F8000178C0 = {
 						CreatedOnToolsVersion = 14.3;
@@ -335,6 +335,7 @@
 			);
 			inputPaths = (
 				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
+				"$(SRCROOT)/WhatThePhrase/GoogleService-Info.plist",
 			);
 			name = Crashlytics;
 			outputFileListPaths = (
@@ -344,7 +345,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n";
+			shellScript = "export GOOGLE_SERVICE_INFO_PLIST=\"$SRCROOT/WhatThePhrase/GoogleService-Info.plist\"\n\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\" -gsp \"$SRCROOT/WhatThePhrase/GoogleService-Info.plist\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -433,6 +434,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -462,9 +464,10 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -484,6 +487,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -493,6 +497,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -525,6 +530,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -537,6 +543,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;

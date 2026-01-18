@@ -56,14 +56,17 @@ final class RequestManager: ObservableObject {
     private var cachedWordlists: [String: [String]]? = nil
     private var cachedMode: Bool? = nil
     
-    private init() {}
+    private init() {
+        // Singleton: prevent external initialization.
+    }
     
     private let kidsCategories: [String] = [
         "Animals",
         "Food",
         "Toys & Games",
         "Home",
-        "Nature"
+        "Nature",
+        "Random"
     ]
     
     private let regularCategories: [String] = [
@@ -195,7 +198,8 @@ final class RequestManager: ObservableObject {
             "Food": ["apple", "banana", "pizza", "cake", "milk", "juice", "bread", "cheese", "egg", "rice"],
             "Toys & Games": ["ball", "doll", "car", "block", "puzzle", "cards", "swing", "slide", "bike", "dice"],
             "Home": ["bed", "chair", "table", "door", "window", "light", "bath", "sink", "sofa", "lamp"],
-            "Nature": ["tree", "flower", "grass", "sun", "moon", "star", "rain", "snow", "wind", "rock"]
+            "Nature": ["tree", "flower", "grass", "sun", "moon", "star", "rain", "snow", "wind", "rock"],
+            "Random": []
         ] : [
             "Places & Spaces": ["beach", "mountain", "city", "park", "school", "home", "store", "restaurant", "airport", "hospital"],
             "Travel & Transit": ["car", "bus", "train", "airplane", "bicycle", "taxi", "subway", "boat", "scooter", "walking"],

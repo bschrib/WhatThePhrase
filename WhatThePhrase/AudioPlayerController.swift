@@ -18,7 +18,7 @@ class AudioPlayerController: NSObject, AVAudioPlayerDelegate, ObservableObject {
         }
     }
 
-    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+    func audioPlayerDidFinishPlaying(_ _: AVAudioPlayer, successfully _: Bool) {
         self.player = nil
     }
 }
