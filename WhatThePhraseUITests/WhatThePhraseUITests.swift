@@ -1,10 +1,20 @@
 import XCTest
 
+@MainActor
 final class WhatThePhraseUITests: XCTestCase {
     let app = XCUIApplication()
     
+    private func ensureToggle(_ toggle: XCUIElement, isOn: Bool) {
+        guard toggle.exists else { return }
+        let rawValue = (toggle.value as? String) ?? ""
+        let isCurrentlyOn = rawValue == "1" || rawValue.lowercased() == "on"
+        if isCurrentlyOn != isOn {
+            toggle.tap()
+        }
+    }
+    
     func testTakeScreenshots() async throws {
-        await setupSnapshot(app)
+        setupSnapshot(app)
 
         // Force light mode for screenshots
         app.launchArguments.append("-UIUserInterfaceStyle")
@@ -13,11 +23,11 @@ final class WhatThePhraseUITests: XCTestCase {
         app.launch()
         
         // Wait for app to launch and initial view to appear
-        let categoryView = app.navigationBars["Select Category"]
+        let categoryView = app.staticTexts["Select Category"]
         XCTAssertTrue(categoryView.waitForExistence(timeout: 5))
         
         // 01: Category View (default)
-        await snapshot("01CategoryView")
+        snapshot("01CategoryView")
         
         // 02: Info Page View
         let infoButton = app.buttons["infoButton"]
@@ -25,9 +35,9 @@ final class WhatThePhraseUITests: XCTestCase {
         infoButton.tap()
         
         // Wait for info sheet to appear
-        let infoNavBar = app.navigationBars["How to Play"]
+        let infoNavBar = app.navigationBars["How To Play"]
         XCTAssertTrue(infoNavBar.waitForExistence(timeout: 5))
-        await snapshot("02InfoView")
+        snapshot("02InfoView")
         
         // Dismiss info
         let doneButton = app.buttons["Done"]
@@ -43,11 +53,21 @@ final class WhatThePhraseUITests: XCTestCase {
         settingsButton.tap()
         
         // Wait for settings sheet to appear
-        let settingsNavBar = app.navigationBars["Settings"]
+        let settingsNavBar = app.navigationBars["Options"]
         XCTAssertTrue(settingsNavBar.waitForExistence(timeout: 5))
         
+        let kidsToggle = app.switches["kidsModeToggle"]
+        XCTAssertTrue(kidsToggle.waitForExistence(timeout: 5))
+        ensureToggle(kidsToggle, isOn: false)
+
+        let settingsTeamsToggle = app.switches["playAsTeamsToggle"]
+        XCTAssertTrue(settingsTeamsToggle.waitForExistence(timeout: 5))
+        ensureToggle(settingsTeamsToggle, isOn: true)
+
+        try await Task.sleep(nanoseconds: 300_000_000)
+
         // 03: Settings View
-        await snapshot("03SettingsView")
+        snapshot("03SettingsView")
         
         // Dismiss settings
         let settingsDoneButton = app.buttons["Done"]
@@ -72,8 +92,8 @@ final class WhatThePhraseUITests: XCTestCase {
         XCTAssertTrue(team1Button.waitForExistence(timeout: 5))
         try await Task.sleep(nanoseconds: 1_000_000_000) // Wait for word to load
         
-        // 05: Teams Game Mode View
-        await snapshot("05TeamsGameView")
+        // 04: Teams Game Mode View
+        snapshot("04TeamsGameView")
         
         // Go back to categories
         let backButton = app.buttons["Go Back To Categories"]
@@ -89,9 +109,7 @@ final class WhatThePhraseUITests: XCTestCase {
         
         let teamsToggle = app.switches["playAsTeamsToggle"]
         XCTAssertTrue(teamsToggle.waitForExistence(timeout: 5))
-        if teamsToggle.value as? Int == 1 {
-            teamsToggle.tap()
-        }
+        ensureToggle(teamsToggle, isOn: false)
         
         try await Task.sleep(nanoseconds: 500_000_000)
         
@@ -104,15 +122,13 @@ final class WhatThePhraseUITests: XCTestCase {
         
         // Start a game without teams
         placesCategory.tap()
+        XCTAssertTrue(startButton.waitForExistence(timeout: 5))
         startButton.tap()
         
         // Wait for game to start - look for the Correct button (non-team mode)
         let correctButton = app.buttons["Correct"]
         XCTAssertTrue(correctButton.waitForExistence(timeout: 5))
         try await Task.sleep(nanoseconds: 1_000_000_000) // Wait for word to load
-        
-        // 06: Non-Team Game Mode View
-        await snapshot("06NonTeamGameView")
         
         // Complete the game flow for the final screenshot
         // Note: In non-team mode, there's no "Team 2" button, so we'll just stop the game
@@ -121,7 +137,8 @@ final class WhatThePhraseUITests: XCTestCase {
         stopButton.tap()
         
         try await Task.sleep(nanoseconds: 500_000_000)
-        await snapshot("07GameViewComplete")
+        // 05: Time's Up Alert
+        snapshot("05TimesUp")
         
         // Dismiss alert and finish
         let okButton = app.alerts["Time's Up!"].scrollViews.otherElements.buttons["OK"]
