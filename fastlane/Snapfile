@@ -16,7 +16,7 @@ scheme("WhatThePhraseScreenShots")
 testplan("WhatThePhraseScreenShots")
 
 # Where should the screenshots be stored?
-output_directory("./screenshots")
+output_directory("../screenshots")
 
 # Clear all previously generated screenshots before creating new ones
 clear_previous_screenshots(true)

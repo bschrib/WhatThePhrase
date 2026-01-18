@@ -239,6 +239,38 @@ This will:
 - Upload binary, metadata, and screenshots
 - Submit for review automatically
 
+### Screenshots
+
+Screenshots are stored in the `screenshots/` directory at the repository root. The structure follows Fastlane's deliver format:
+
+```
+screenshots/
+└── en-US/
+    ├── iPhone 17 Pro-01CategoryView.png
+    ├── iPhone 17 Pro-02InfoView.png
+    ├── iPhone 17 Pro Max-01CategoryView.png
+    └── ...
+```
+
+**Generating Screenshots:**
+```bash
+bundle exec fastlane screenshots
+```
+
+This runs the UI tests defined in the `WhatThePhraseScreenShots` scheme and generates screenshots for all configured devices and locales (as defined in `fastlane/Snapfile`).
+
+**Uploading Screenshots Only:**
+```bash
+bundle exec fastlane upload_screenshots
+```
+
+This uploads screenshots to App Store Connect without building or uploading a binary. Screenshots are read from the `screenshots/` directory.
+
+**Screenshot Structure:**
+- Screenshots must be organized by locale (e.g., `en-US/`)
+- Filenames should include the device name (e.g., `iPhone 17 Pro-01CategoryView.png`)
+- The `upload_screenshots` lane automatically reads from `screenshots/` directory
+
 ### Code Signing with Match
 
 This project uses [Match](https://docs.fastlane.tools/actions/match/) for code signing. Certificates and provisioning profiles are stored in a private Git repository.
