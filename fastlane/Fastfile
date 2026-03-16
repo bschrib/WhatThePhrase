@@ -10,12 +10,18 @@ platform :ios do
   desc "Push a new beta build to TestFlight"
   lane :beta do
     # Sync certificates
-    match(type: "appstore") 
+    match(type: "appstore")
 
-    # Build the app
-    increment_build_number(xcodeproj: "WhatThePhrase.xcodeproj")
+    # Fetch latest build number from TestFlight and increment
+    current = latest_testflight_build_number(
+      app_identifier: "com.roguedeveloper.WhatThePhrase"
+    )
+    increment_build_number(
+      xcodeproj: "WhatThePhrase.xcodeproj",
+      build_number: current + 1
+    )
     build_app(scheme: "WhatThePhrase")
-    
+
     # Upload to TestFlight
     upload_to_testflight
   end
@@ -24,9 +30,16 @@ platform :ios do
   lane :release do
     # Sync certificates
     match(type: "appstore")
-    
-    # Build the app
-    increment_build_number(xcodeproj: "WhatThePhrase.xcodeproj")
+
+    # Fetch latest build number from App Store and increment
+    current = app_store_build_number(
+      app_identifier: "com.roguedeveloper.WhatThePhrase",
+      live: false
+    )
+    increment_build_number(
+      xcodeproj: "WhatThePhrase.xcodeproj",
+      build_number: current + 1
+    )
     build_app(scheme: "WhatThePhrase")
     
     # Upload to App Store
