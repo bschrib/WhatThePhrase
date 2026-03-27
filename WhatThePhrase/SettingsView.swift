@@ -4,14 +4,24 @@ struct SettingsView: View {
     @Binding var playAsTeams: Bool
     @Binding var timerDuration: Int
     @Binding var isKidsMode: Bool
+    @Binding var kidsDifficulty: KidsDifficulty
     @StateObject private var requestManager = RequestManager.shared
-    
+
     @Environment(\.dismiss) var dismiss
+
+    private var difficultyDescription: String {
+        switch kidsDifficulty {
+        case .easy: return "Short, simple words for younger kids"
+        case .medium: return "A wider mix of kid-friendly words"
+        case .hard: return "Challenging words for older kids"
+        }
+    }
 
     func resetToDefaultSettings() {
         playAsTeams = true
         timerDuration = 60
         isKidsMode = false
+        kidsDifficulty = .medium
     }
 
     var body: some View {
@@ -46,7 +56,32 @@ struct SettingsView: View {
                                 RoundedRectangle(cornerRadius: 16)
                                     .fill(.ultraThinMaterial)
                             }
-                            
+
+                            if isKidsMode {
+                                VStack(alignment: .leading, spacing: 8) {
+                                    Text("Difficulty")
+                                        .font(.body)
+                                        .foregroundColor(.primary)
+                                    Picker("Difficulty", selection: $kidsDifficulty) {
+                                        ForEach(KidsDifficulty.allCases, id: \.self) { difficulty in
+                                            Text(difficulty.displayName).tag(difficulty)
+                                        }
+                                    }
+                                    .pickerStyle(.segmented)
+                                    .accessibilityIdentifier("kidsDifficultyPicker")
+                                    Text(difficultyDescription)
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                                .padding(.horizontal, 20)
+                                .padding(.vertical, 16)
+                                .background {
+                                    RoundedRectangle(cornerRadius: 16)
+                                        .fill(.ultraThinMaterial)
+                                }
+                                .transition(.opacity.combined(with: .move(edge: .top)))
+                            }
+
                             HStack {
                                 VStack(alignment: .leading, spacing: 4) {
                                     Text("Play As Teams")
@@ -69,9 +104,13 @@ struct SettingsView: View {
                             }
                         }
                     }
+                    .animation(.easeInOut, value: isKidsMode)
                     .onChange(of: isKidsMode) { oldValue, newValue in
                         requestManager.isKidsMode = newValue
                         requestManager.resetUsedWords()
+                    }
+                    .onChange(of: kidsDifficulty) { oldValue, newValue in
+                        requestManager.setKidsDifficulty(newValue)
                     }
                     
                     // Duration Section
@@ -144,6 +183,6 @@ struct SettingsView: View {
 
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        SettingsView(playAsTeams: .constant(true), timerDuration: .constant(60), isKidsMode: .constant(false))
+        SettingsView(playAsTeams: .constant(true), timerDuration: .constant(60), isKidsMode: .constant(true), kidsDifficulty: .constant(.medium))
     }
 }
