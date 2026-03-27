@@ -7,14 +7,27 @@
 default_platform(:ios)
 
 platform :ios do
+  # Load App Store Connect API key from environment variables
+  # Set via: source <(op inject -i fastlane.op --account=3W2HMD2KKRGNBNJI3UD2NQ726A)
+  private_lane :load_asc_api_key do
+    app_store_connect_api_key(
+      key_id: ENV["APP_STORE_CONNECT_API_KEY_KEY_ID"],
+      issuer_id: ENV["APP_STORE_CONNECT_API_KEY_ISSUER_ID"],
+      key_filepath: ENV["APP_STORE_CONNECT_API_KEY_PATH"]
+    )
+  end
+
   desc "Push a new beta build to TestFlight"
   lane :beta do
+    api_key = load_asc_api_key
+
     # Sync certificates
-    match(type: "appstore")
+    match(type: "appstore", api_key: api_key)
 
     # Fetch latest build number from TestFlight and increment
     current = latest_testflight_build_number(
-      app_identifier: "com.roguedeveloper.WhatThePhrase"
+      app_identifier: "com.roguedeveloper.WhatThePhrase",
+      api_key: api_key
     )
     increment_build_number(
       xcodeproj: "WhatThePhrase.xcodeproj",
@@ -23,17 +36,20 @@ platform :ios do
     build_app(scheme: "WhatThePhrase")
 
     # Upload to TestFlight
-    upload_to_testflight
+    upload_to_testflight(api_key: api_key)
   end
 
   desc "Push a new build to the App Store (Public Release)"
   lane :release do
+    api_key = load_asc_api_key
+
     # Sync certificates
-    match(type: "appstore")
+    match(type: "appstore", api_key: api_key)
 
     # Fetch latest build number from App Store and increment
     current = app_store_build_number(
       app_identifier: "com.roguedeveloper.WhatThePhrase",
+      api_key: api_key,
       live: false
     )
     increment_build_number(
@@ -41,15 +57,15 @@ platform :ios do
       build_number: current + 1
     )
     build_app(scheme: "WhatThePhrase")
-    
+
     # Upload to App Store
-    # This will use the same App-Specific Password environment variable you used for beta
     upload_to_app_store(
+      api_key: api_key,
       skip_metadata: false,
-      skip_screenshots: false,   # Uploads from ./screenshots folder
+      skip_screenshots: false,
       skip_binary_upload: false,
-      submit_for_review: true,    # Automatically submits for review
-      automatic_release: false,    # Requires you to click "Release" manually in App Store Connect
+      submit_for_review: true,
+      automatic_release: false,
       force: true,
       screenshots_path: "screenshots",
       submission_information: {
@@ -79,7 +95,8 @@ platform :ios do
 
   desc "Build for local development"
   lane :develop do
-    match(type: "development")
+    api_key = load_asc_api_key
+    match(type: "development", api_key: api_key)
     build_app(
       project: "WhatThePhrase.xcodeproj",
       scheme: "WhatThePhrase",

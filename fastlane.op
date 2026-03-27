@@ -1,1 +1,7 @@
+export FASTLANE_USER="bschrib@gmail.com"
+export FASTLANE_PASSWORD="op://Private/64tlrskwd3uh3a2dcdxdpkllz4/password"
 export FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD="op://production/fastlaneAppleAppPassword/password"
+export MATCH_PASSWORD="op://production/fastlaneAppleAppPassword/matchRepoPassword"
+export APP_STORE_CONNECT_API_KEY_KEY_RAW="op://production/fastlaneAppleAppPassword/p8Key"
+export APP_STORE_CONNECT_API_KEY_KEY_ID="op://production/fastlaneAppleAppPassword/keyId"
+export APP_STORE_CONNECT_API_KEY_ISSUER_ID="op://production/fastlaneAppleAppPassword/issuerId"
