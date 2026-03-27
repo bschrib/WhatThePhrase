@@ -13,6 +13,71 @@ final class WhatThePhraseUITests: XCTestCase {
         }
     }
     
+    func testKidsDifficultyPickerVisibility() async throws {
+        app.launch()
+
+        let settingsButton = app.buttons["settingsButton"]
+        XCTAssertTrue(settingsButton.waitForExistence(timeout: 5))
+        settingsButton.tap()
+
+        let settingsNavBar = app.navigationBars["Options"]
+        XCTAssertTrue(settingsNavBar.waitForExistence(timeout: 5))
+
+        let kidsToggle = app.switches["kidsModeToggle"]
+        XCTAssertTrue(kidsToggle.waitForExistence(timeout: 5))
+
+        let difficultyPicker = app.segmentedControls["kidsDifficultyPicker"]
+
+        // Ensure kids mode is off — difficulty picker should not be visible
+        ensureToggle(kidsToggle, isOn: false)
+        try await Task.sleep(nanoseconds: 500_000_000)
+        XCTAssertFalse(difficultyPicker.exists, "Difficulty picker should be hidden when kids mode is off")
+
+        // Enable kids mode — difficulty picker should appear
+        ensureToggle(kidsToggle, isOn: true)
+        try await Task.sleep(nanoseconds: 500_000_000)
+        XCTAssertTrue(difficultyPicker.waitForExistence(timeout: 3), "Difficulty picker should appear when kids mode is on")
+
+        // Disable kids mode — difficulty picker should disappear
+        ensureToggle(kidsToggle, isOn: false)
+        try await Task.sleep(nanoseconds: 500_000_000)
+        XCTAssertFalse(difficultyPicker.exists, "Difficulty picker should hide when kids mode is turned off")
+    }
+
+    func testKidsDifficultySelection() async throws {
+        app.launch()
+
+        let settingsButton = app.buttons["settingsButton"]
+        XCTAssertTrue(settingsButton.waitForExistence(timeout: 5))
+        settingsButton.tap()
+
+        let settingsNavBar = app.navigationBars["Options"]
+        XCTAssertTrue(settingsNavBar.waitForExistence(timeout: 5))
+
+        let kidsToggle = app.switches["kidsModeToggle"]
+        XCTAssertTrue(kidsToggle.waitForExistence(timeout: 5))
+        ensureToggle(kidsToggle, isOn: true)
+        try await Task.sleep(nanoseconds: 500_000_000)
+
+        let difficultyPicker = app.segmentedControls["kidsDifficultyPicker"]
+        XCTAssertTrue(difficultyPicker.waitForExistence(timeout: 3))
+
+        // Tap Easy
+        difficultyPicker.buttons["Easy"].tap()
+        try await Task.sleep(nanoseconds: 300_000_000)
+        XCTAssertTrue(difficultyPicker.buttons["Easy"].isSelected)
+
+        // Tap Hard
+        difficultyPicker.buttons["Hard"].tap()
+        try await Task.sleep(nanoseconds: 300_000_000)
+        XCTAssertTrue(difficultyPicker.buttons["Hard"].isSelected)
+
+        // Tap Medium
+        difficultyPicker.buttons["Medium"].tap()
+        try await Task.sleep(nanoseconds: 300_000_000)
+        XCTAssertTrue(difficultyPicker.buttons["Medium"].isSelected)
+    }
+
     func testTakeScreenshots() async throws {
         setupSnapshot(app)
 
@@ -66,8 +131,17 @@ final class WhatThePhraseUITests: XCTestCase {
 
         try await Task.sleep(nanoseconds: 300_000_000)
 
-        // 03: Settings View
+        // 03: Settings View (default, no kids mode)
         snapshot("03SettingsView")
+
+        // 03b: Settings View with kids mode + difficulty picker
+        ensureToggle(kidsToggle, isOn: true)
+        try await Task.sleep(nanoseconds: 500_000_000)
+        snapshot("03bSettingsKidsMode")
+
+        // Reset kids mode off for subsequent screenshots
+        ensureToggle(kidsToggle, isOn: false)
+        try await Task.sleep(nanoseconds: 300_000_000)
         
         // Dismiss settings
         let settingsDoneButton = app.buttons["Done"]
