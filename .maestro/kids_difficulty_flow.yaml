@@ -1,0 +1,15 @@
+# kids_difficulty_flow.yaml
+# Smoke test: enable kids mode, set difficulty, play a round
+
+appId: com.roguedeveloper.WhatThePhrase
+---
+- launchApp
+- tapOn: "settingsButton"
+- tapOn: "kidsModeToggle"
+- tapOn: "Easy"
+- tapOn: "Done"
+- tapOn: "Animals"
+- tapOn: "Start"
+- assertVisible: "Stop"
+- tapOn: "Stop"
+- tapOn: "OK"
