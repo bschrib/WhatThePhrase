@@ -1,6 +1,20 @@
 import Foundation
 import Combine
 
+enum KidsDifficulty: String, CaseIterable, Codable {
+    case easy
+    case medium
+    case hard
+
+    var displayName: String {
+        switch self {
+        case .easy: return "Easy"
+        case .medium: return "Medium"
+        case .hard: return "Hard"
+        }
+    }
+}
+
 final class UsedWordsStore: @unchecked Sendable {
     private var usedWords: [String: Set<String>] = [:]
     private let queue = DispatchQueue(label: "com.whatthephrase.usedwords", attributes: .concurrent)
@@ -51,10 +65,12 @@ final class RequestManager: ObservableObject {
     
     private let usedWordsStore = UsedWordsStore()
     @Published var isKidsMode: Bool = false
-    
+    @Published var kidsDifficulty: KidsDifficulty = .medium
+
     // Cache for merged wordlists to avoid reloading on every request
     private var cachedWordlists: [String: [String]]? = nil
     private var cachedMode: Bool? = nil
+    private var cachedDifficulty: KidsDifficulty? = nil
     
     private init() {
         // Singleton: prevent external initialization.
@@ -111,18 +127,18 @@ final class RequestManager: ObservableObject {
     }
     
     /// Loads word bank JSON (tag-based word collection)
-    private func loadWordBank() -> [String: [String]]? {
-        let filename = isKidsMode ? "kids_wordbank" : "wordbank"
-        
+    private func loadWordBank(named overrideFilename: String? = nil) -> [String: [String]]? {
+        let filename = overrideFilename ?? (isKidsMode ? "kids_wordbank" : "wordbank")
+
         guard let url = Bundle.main.url(forResource: filename, withExtension: "json") else {
             print("⚠️ Could not find \(filename).json in main bundle - word bank not available")
             return nil
         }
-        
+
         do {
             let data = try Data(contentsOf: url)
             let wordBank = try JSONDecoder().decode([String: [String]].self, from: data)
-            print("✅ Loaded word bank with \(wordBank.count) tags")
+            print("✅ Loaded word bank '\(filename)' with \(wordBank.count) tags")
             return wordBank
         } catch {
             print("⚠️ Error loading \(filename).json: \(error.localizedDescription)")
@@ -183,8 +199,8 @@ final class RequestManager: ObservableObject {
     }
     
     func loadLocalWordlists() -> [String: [String]] {
-        // Check cache first
-        if let cached = cachedWordlists, cachedMode == isKidsMode {
+        // Check cache first (must match mode AND difficulty)
+        if let cached = cachedWordlists, cachedMode == isKidsMode, cachedDifficulty == kidsDifficulty {
             print("📦 Using cached wordlists")
             return cached
         }
@@ -214,6 +230,7 @@ final class RequestManager: ObservableObject {
             print("📝 Fallback categories: \(fallbackWordlists.keys.sorted())")
             cachedWordlists = fallbackWordlists
             cachedMode = isKidsMode
+            cachedDifficulty = kidsDifficulty
             return fallbackWordlists
         }
         
@@ -230,9 +247,44 @@ final class RequestManager: ObservableObject {
                 return fallbackWordlists
             }
             
-            // Load word bank and merge
-            let wordBank = loadWordBank()
-            let mergedWordlists = mergeWordlistsWithBank(baseWordlists: baseWordlists, wordBank: wordBank)
+            // Load word bank and merge based on difficulty
+            let mergedWordlists: [String: [String]]
+            if isKidsMode && kidsDifficulty == .easy {
+                // Easy: base words only, no word bank merge
+                mergedWordlists = baseWordlists
+            } else if isKidsMode && kidsDifficulty == .hard {
+                // Hard: kids base + kids wordbank + regular wordbank for extra challenge
+                let kidsWordBank = loadWordBank()
+                var hardWordlists = mergeWordlistsWithBank(baseWordlists: baseWordlists, wordBank: kidsWordBank)
+                if let regularWordBank = loadWordBank(named: "wordbank") {
+                    // Blend regular wordbank words into kids categories via tag mapping
+                    for (category, _) in hardWordlists {
+                        if category == "Random" { continue }
+                        if let tags = kidsCategoryTagMap[category] {
+                            var words = Set(hardWordlists[category] ?? [])
+                            for tag in tags {
+                                if let tagWords = regularWordBank[tag] {
+                                    words.formUnion(tagWords)
+                                }
+                            }
+                            hardWordlists[category] = Array(words).sorted()
+                        }
+                    }
+                    // Rebuild Random from all categories
+                    if hardWordlists["Random"] != nil {
+                        var randomWords = Set<String>()
+                        for (category, words) in hardWordlists where category != "Random" {
+                            randomWords.formUnion(words)
+                        }
+                        hardWordlists["Random"] = Array(randomWords).sorted()
+                    }
+                }
+                mergedWordlists = hardWordlists
+            } else {
+                // Medium (default) or regular mode: base + wordbank
+                let wordBank = loadWordBank()
+                mergedWordlists = mergeWordlistsWithBank(baseWordlists: baseWordlists, wordBank: wordBank)
+            }
             
             // Log each category and word count
             print("📊 Loaded categories and word counts (after merge):")
@@ -253,6 +305,7 @@ final class RequestManager: ObservableObject {
             // Cache the result
             cachedWordlists = mergedWordlists
             cachedMode = isKidsMode
+            cachedDifficulty = kidsDifficulty
             
             return mergedWordlists
             
@@ -261,6 +314,7 @@ final class RequestManager: ObservableObject {
             print("📝 Using fallback word lists with categories: \(fallbackWordlists.keys.sorted())")
             cachedWordlists = fallbackWordlists
             cachedMode = isKidsMode
+            cachedDifficulty = kidsDifficulty
             return fallbackWordlists
         }
     }
@@ -304,6 +358,14 @@ final class RequestManager: ObservableObject {
         // Clear cache when mode changes so new wordlists are loaded
         cachedWordlists = nil
         cachedMode = nil
+        cachedDifficulty = nil
+    }
+
+    func setKidsDifficulty(_ difficulty: KidsDifficulty) {
+        kidsDifficulty = difficulty
+        resetUsedWords()
+        cachedWordlists = nil
+        cachedDifficulty = nil
     }
     
     func preloadWordlists() {

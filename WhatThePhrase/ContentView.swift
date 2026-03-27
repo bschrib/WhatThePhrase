@@ -13,16 +13,25 @@ struct ContentView: View {
     @AppStorage("playAsTeams") private var playAsTeams: Bool = true
     @AppStorage("timerDuration") private var timerDuration: Int = 60
     @AppStorage("isKidsMode") private var isKidsMode: Bool = false
+    @AppStorage("kidsDifficulty") private var kidsDifficultyRaw: String = KidsDifficulty.medium.rawValue
     @StateObject private var requestManager = RequestManager.shared
+
+    private var kidsDifficultyBinding: Binding<KidsDifficulty> {
+        Binding(
+            get: { KidsDifficulty(rawValue: kidsDifficultyRaw) ?? .medium },
+            set: { kidsDifficultyRaw = $0.rawValue }
+        )
+    }
     
     private var categories: [String] {
         requestManager.categories
     }
     
     init() {
-        // Ensure the manager's kids mode is in sync with user defaults
+        // Ensure the manager's kids mode and difficulty are in sync with user defaults
         let manager = RequestManager.shared
         manager.isKidsMode = isKidsMode
+        manager.kidsDifficulty = KidsDifficulty(rawValue: kidsDifficultyRaw) ?? .medium
         // Preload wordlists in the background
         DispatchQueue.global(qos: .userInitiated).async {
             manager.preloadWordlists()
@@ -128,9 +137,10 @@ struct ContentView: View {
                 .presentationDetents([.large])
             }
             .sheet(isPresented: $showSettings) {
-                SettingsView(playAsTeams: $playAsTeams, 
-                            timerDuration: $timerDuration, 
-                            isKidsMode: $isKidsMode)
+                SettingsView(playAsTeams: $playAsTeams,
+                            timerDuration: $timerDuration,
+                            isKidsMode: $isKidsMode,
+                            kidsDifficulty: kidsDifficultyBinding)
             }
             .sheet(isPresented: $showInfo) {
                 InfoView()
@@ -144,7 +154,13 @@ struct ContentView: View {
             let manager = RequestManager.shared
             manager.isKidsMode = newValue
             manager.resetUsedWords()
-            // Preload the new wordlists in the background
+            DispatchQueue.global(qos: .userInitiated).async {
+                manager.preloadWordlists()
+            }
+        }
+        .onChange(of: kidsDifficultyRaw) { oldValue, newValue in
+            let manager = RequestManager.shared
+            manager.setKidsDifficulty(KidsDifficulty(rawValue: newValue) ?? .medium)
             DispatchQueue.global(qos: .userInitiated).async {
                 manager.preloadWordlists()
             }
