@@ -11,9 +11,9 @@ platform :ios do
   # Set via: source <(op inject -i fastlane.op --account=3W2HMD2KKRGNBNJI3UD2NQ726A)
   private_lane :load_asc_api_key do
     app_store_connect_api_key(
-      key_id: ENV["APP_STORE_CONNECT_API_KEY_KEY_ID"],
-      issuer_id: ENV["APP_STORE_CONNECT_API_KEY_ISSUER_ID"],
-      key_filepath: ENV["APP_STORE_CONNECT_API_KEY_PATH"]
+      key_id: ENV["ASC_KEY_ID"],
+      issuer_id: ENV["ASC_ISSUER_ID"],
+      key_filepath: ENV["ASC_KEY_PATH"]
     )
   end
 
@@ -68,6 +68,7 @@ platform :ios do
       automatic_release: false,
       force: true,
       screenshots_path: "screenshots",
+      precheck_include_in_app_purchases: false,
       submission_information: {
         export_compliance_uses_encryption: false
       }
