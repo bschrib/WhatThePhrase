@@ -1,21 +1,18 @@
-# A list of devices you want to take the screenshots from
+# App Store requires 6.9" and 6.3" screenshots
 devices([
+  "iPhone 17 Pro Max",
   "iPhone 17 Pro"
 ])
 
-# A list of languages you want to take the screenshots from
 languages([
   "en-US"
 ])
 
-# The name of the scheme which contains the UI Tests
 scheme("WhatThePhraseScreenShots")
 
-# The name of the test plan to use (if using Xcode test plans)
-testplan("WhatThePhraseScreenShots")
-
-# Where should the screenshots be stored?
 output_directory("screenshots")
 
-# Clear all previously generated screenshots before creating new ones
 clear_previous_screenshots(true)
+
+# Skip testplan flag — Xcode 26 doesn't support -testplan with xcodebuild test
+override_status_bar(false)

@@ -78,8 +78,7 @@ platform :ios do
   lane :screenshots do
     snapshot(
       project: "WhatThePhrase.xcodeproj",
-      scheme: "WhatThePhraseScreenShots",
-      testplan: "WhatThePhraseScreenShots"
+      scheme: "WhatThePhraseScreenShots"
     )
   end
 
