@@ -66,6 +66,16 @@ rm -f "$P8_TMPFILE"
 
 1Password CLI sessions time out after ~10 minutes of inactivity. If you get `authorization timeout`, re-auth with `op signin --account=3W2HMD2KKRGNBNJI3UD2NQ726A`.
 
+### Release Checklist
+
+Before running `beta` or `release`:
+
+1. **Update release notes** in `fastlane/metadata/en-US/release_notes.txt` — these are uploaded to both TestFlight (as "What to Test") and App Store (as "What's New"). Stale notes WILL ship if not updated.
+2. **Generate fresh screenshots** if UI changed: `bundle exec fastlane screenshots`
+3. **Bump marketing version** in Xcode project if this is a new version (not just a build increment). Use `sed` on `project.pbxproj` — `agvtool` doesn't work reliably with SwiftUI projects.
+
+Release notes cannot be patched after a version goes live on the App Store — get them right before submitting.
+
 ### Screenshots
 
 ```bash

@@ -36,7 +36,10 @@ platform :ios do
     build_app(scheme: "WhatThePhrase")
 
     # Upload to TestFlight
-    upload_to_testflight(api_key: api_key)
+    upload_to_testflight(
+      api_key: api_key,
+      changelog: File.read("fastlane/metadata/en-US/release_notes.txt")
+    )
   end
 
   desc "Push a new build to the App Store (Public Release)"
